@@ -1,107 +1,39 @@
-using System.Collections.Generic;
+using Project.Scripts.Core.InputManageSystem;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
-public class ShipRotation : MonoBehaviour
+namespace Project.Scripts.Core
 {
-    [SerializeField] private float rotationSpeed = 720f;
-
-    private ShipInput input;
-    private RotationResolver rotationResolver;
-
-    private void Awake()
+    public class ShipRotation : MonoBehaviour
     {
-        var directionProvider = new DirectionProvider();
-        rotationResolver = new RotationResolver(directionProvider);
-        input = new ShipInput();
-    }
+        [SerializeField] private float rotationSpeed = 720f;
 
-    private void Update()
-    {
-        RotationDirection direction = input.GetRotationDirection();
-
-        if (direction == RotationDirection.None)
-            return;
-
-        float targetAngle = rotationResolver.GetAngle(direction);
-
-        float newAngle = Mathf.MoveTowardsAngle(
-            transform.eulerAngles.z,
-            targetAngle,
-            rotationSpeed * Time.deltaTime
-        );
-
-        transform.rotation = Quaternion.Euler(0f, 0f, newAngle);
-    }
-
-    // Отдаём текущее направление носа
-    public Vector2 Forward => transform.right;
-}
-
-public enum RotationDirection
-{
-    None,
-    Up,
-    Down,
-    Left,
-    Right
-}
-
-public class ShipInput
-{
-    public RotationDirection GetRotationDirection()
-    {
-        if (Input.GetKey(KeyCode.W)) return RotationDirection.Up;
-        if (Input.GetKey(KeyCode.S)) return RotationDirection.Down;
-        if (Input.GetKey(KeyCode.A)) return RotationDirection.Left;
-        if (Input.GetKey(KeyCode.D)) return RotationDirection.Right;
-
-        return RotationDirection.None;
-    }
-
-    public bool IsThrusting()
-    {
-        return Input.GetKey(KeyCode.Space);
-    }
-}
-
-public class DirectionProvider
-{
-    private readonly Dictionary<RotationDirection, Vector2> directions =
-        new()
+        private DesktopInput _input;
+        private RotationResolver _rotationResolver;
+        
+        public Vector2 Forward => transform.right;
+        
+        private void Awake()
         {
-            { RotationDirection.Up, Vector2.up },
-            { RotationDirection.Down, Vector2.down },
-            { RotationDirection.Left, Vector2.left },
-            { RotationDirection.Right, Vector2.right }
-        };
+            _rotationResolver = new RotationResolver();
+            _input = new DesktopInput();
+        }
 
-    public Vector2 GetVector(RotationDirection direction)
-    {
-        if (direction == RotationDirection.None)
-            return Vector2.zero;
+        private void Update()
+        {
+            DirectionRotation direction = _input.GetRotationDirection();
 
-        return directions[direction];
-    }
-}
+            if (direction == DirectionRotation.None)
+                return;
 
+            float targetAngle = _rotationResolver.GetAngle(direction);
 
-public class RotationResolver
-{
-    private readonly DirectionProvider directionProvider;
+            float newAngle = Mathf.MoveTowardsAngle(
+                transform.eulerAngles.z,
+                targetAngle,
+                rotationSpeed * Time.deltaTime
+            );
 
-    public RotationResolver(DirectionProvider provider)
-    {
-        directionProvider = provider;
-    }
-
-    public float GetAngle(RotationDirection direction)
-    {
-        Vector2 dir = directionProvider.GetVector(direction);
-
-        if (dir == Vector2.zero)
-            return float.NaN;
-
-        return Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, 0f, newAngle);
+        }
     }
 }
