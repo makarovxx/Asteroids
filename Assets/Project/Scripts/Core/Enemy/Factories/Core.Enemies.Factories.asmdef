@@ -1,0 +1,4 @@
+{
+	"name": "Core.Enemies.Factories",
+	"references":[ "Core.Entities" ]
+}

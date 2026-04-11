@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Project.Scripts.Core
+namespace Project.Scripts.Core.CustomPhysics
 {
     public enum DirectionRotation
     {
@@ -24,22 +24,24 @@ namespace Project.Scripts.Core
         
         public float GetAngle(DirectionRotation direction)
         {
-            Vector2 dir = GetVector(direction);
-
-            if (dir == Vector2.zero)
+            if (!_directions.TryGetValue(direction, out Vector2 dir))
                 return float.NaN;
 
-            return Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            float radians = GetRadians(dir);
+            return ToDegrees(radians);
         }
         
-        private Vector2 GetVector(DirectionRotation direction)
+        public float GetAngle(Vector2 direction)
         {
-            if (direction == DirectionRotation.None)
-                return Vector2.zero;
+            if (direction == Vector2.zero)
+                return float.NaN;
 
-            return _directions[direction];
+            float radians = GetRadians(direction);
+            return ToDegrees(radians);
         }
-
         
+        private float GetRadians(Vector2 dir) => Mathf.Atan2(dir.y, dir.x);
+
+        private float ToDegrees(float radians) => radians * Mathf.Rad2Deg;
     }
 }

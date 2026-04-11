@@ -1,5 +1,7 @@
+using Project.Scripts.Core.CustomPhysics;
 using Project.Scripts.Core.InputManageSystem;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Project.Scripts.Core
 {
@@ -8,20 +10,23 @@ namespace Project.Scripts.Core
         [SerializeField] private float acceleration = 8f;
         [SerializeField] private float maxSpeed = 12f;
         [SerializeField] private float damping = 0.8f;
-
-        [SerializeField] private ShipRotation rotation;
-
+        [SerializeField] private float rotationSpeed = 720f;
+        
+        private RotationResolver _rotationResolver;
+        private Vector2 DirectionShipDefault => transform.right;
         private DesktopInput _input;
         private Vector2 _velocity;
-        private bool _isDynamic;
+
         private void Awake()
         {
             _input = new DesktopInput();
+            _rotationResolver = new RotationResolver();
         }
 
         private void Update()
         {
             HandleMovement();
+            HandleRotation();
         }
 
         private void HandleMovement()
@@ -34,9 +39,27 @@ namespace Project.Scripts.Core
             Move();
         }
 
+        private void HandleRotation()
+        {
+            DirectionRotation direction = _input.GetRotationDirection();
+
+            if (direction == DirectionRotation.None)
+                return;
+
+            float targetAngle = _rotationResolver.GetAngle(direction);
+
+            float newAngle = Mathf.MoveTowardsAngle(
+                transform.eulerAngles.z,
+                targetAngle,
+                rotationSpeed * Time.deltaTime
+            );
+
+            transform.rotation = Quaternion.Euler(0f, 0f, newAngle);
+        }
+
         private void Accelerate()
         {
-            _velocity += rotation.Forward * acceleration * Time.deltaTime;
+            _velocity += DirectionShipDefault * acceleration * Time.deltaTime;
             _velocity = Vector2.ClampMagnitude(_velocity, maxSpeed);
         }
 
@@ -48,55 +71,6 @@ namespace Project.Scripts.Core
         private void Move()
         {
             transform.Translate(_velocity * Time.deltaTime, Space.World);
-        }
-        
-        [ContextMenu("ApplyVelocity")]
-        private void ApplyVelocity()
-        {
-            _velocity = Vector2.up;
-        }
-    }
-    
-    public class CustomPhysics : IMovable
-    {
-        private float _maxVelocity;
-        private float _dampingModifier;
-        private float _accelerationModifier;
-        public Vector2 CurrentVelocity { get; private set; }
-
-        public CustomPhysics(float maxVelocity, float dampingModifier, float accelerationModifier, Vector2 startVelocity)
-        {
-            _maxVelocity = maxVelocity;
-            _dampingModifier = dampingModifier;
-            _accelerationModifier = accelerationModifier;
-            CurrentVelocity = startVelocity;
-        }
-
-        public void Move()
-        {
-            throw new System.NotImplementedException();
-        }
-    }
-
-    public interface IMovable
-    {
-        void Move();
-    }
-    
-    public class EntityMovement : IMovable
-    {
-        private Transform _transform;
-        private CustomPhysics _physicComponent;
-
-        public EntityMovement(Transform transform, CustomPhysics physicComponent)
-        {
-            _transform = transform;
-            _physicComponent = physicComponent;
-        }
-
-        public void Move()
-        {
-            // _transform.Translate(_physicComponent.)
         }
     }
 }

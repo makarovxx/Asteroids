@@ -1,9 +1,6 @@
-using System;
-using Zenject;
-
 namespace Project.Scripts.Entities
 {
-    public class Entity 
+    public class SmallAsteroid : Asteroid
     {
         
     }

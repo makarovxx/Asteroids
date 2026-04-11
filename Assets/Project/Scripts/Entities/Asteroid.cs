@@ -1,27 +1,18 @@
-using System;
-using Project.Scripts.Core;
-using Unity.VisualScripting;
+using Project.Scripts.Core.CustomPhysics;
+using Project.Scripts.Plugins;
+using UnityEngine;
+using Zenject;
 
 namespace Project.Scripts.Entities
 {
-    public class Asteroid : IInitializable, IDisposable
+    public class Asteroid : MonoBehaviour, ICreatable
     {
-        private CustomPhysics _physicComponent;
+        private SolidPhysics _physicsComponent;
 
-
-        private void Initialize()
+        [Inject]
+        private void Construct(SolidPhysics physicsComponent)
         {
-            
-        }
-
-        void IInitializable.Initialize()
-        {
-            Initialize();
-        }
-
-        public void Dispose()
-        {
-            
+            _physicsComponent = physicsComponent;
         }
     }
 }
