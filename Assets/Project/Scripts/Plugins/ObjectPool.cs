@@ -48,6 +48,20 @@ namespace Project.Scripts.Plugins
 
         public void PushAllObjects() => _pooledObjects.ForEach(PushObject);
 
+        public bool TryGetObjects(int count,out List<T> objects)
+        {
+            objects = _pooledObjects.Where(obj => obj.gameObject.activeSelf).Take(count).ToList();
+            if (objects == null || objects.Count < count)
+            {
+                return false;
+            }
+            else
+            {
+                objects.ForEach(GetObject);
+                return true;
+            }
+        }
+        
         public bool TryGetObject(out T obj)
         {
             obj = _pooledObjects.FirstOrDefault(item => item.gameObject.activeSelf == false);
@@ -58,5 +72,7 @@ namespace Project.Scripts.Plugins
         }
 
         public void PushObject(T obj) => obj.gameObject.SetActive(false);
+        
+        public void GetObject(T obj) => obj.gameObject.SetActive(true);
     }
 }

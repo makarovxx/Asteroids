@@ -9,7 +9,7 @@ namespace Project.Scripts.Entities
     {
         private SolidPhysics _physicsComponent;
 
-        [Inject]
+        // [Inject]
         private void Construct(SolidPhysics physicsComponent)
         {
             _physicsComponent = physicsComponent;

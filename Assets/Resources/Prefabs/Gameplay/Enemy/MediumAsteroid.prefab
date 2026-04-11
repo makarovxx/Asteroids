@@ -56,8 +56,29 @@ PrefabInstance:
       propertyPath: m_Name
       value: MediumAsteroid
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8986330435253037384, guid: f4c35722430e6724c99d8870502ab6a3, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3745194995641503969, guid: f4c35722430e6724c99d8870502ab6a3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6785067802172120248}
   m_SourcePrefab: {fileID: 100100000, guid: f4c35722430e6724c99d8870502ab6a3, type: 3}
+--- !u!1 &8562353268365866106 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3745194995641503969, guid: f4c35722430e6724c99d8870502ab6a3, type: 3}
+  m_PrefabInstance: {fileID: 4983811261471024283}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6785067802172120248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8562353268365866106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a50733505649452d8b153b28922caf6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
