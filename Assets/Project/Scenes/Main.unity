@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &367491460 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6102494174743068292, guid: c11673fe0173ed54591f5d44967598fd, type: 3}
+  m_PrefabInstance: {fileID: 6447813327078482060}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &499400017
 GameObject:
   m_ObjectHideFlags: 0
@@ -132,6 +137,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 499400018}
+  - component: {fileID: 499400019}
   m_Layer: 0
   m_Name: SpawnEnemyController
   m_TagString: Untagged
@@ -154,6 +160,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &499400019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 499400017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f3d11c6db174433ad7b683dd137987a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spawnPoints:
+  - {x: 0.1, y: 0.25}
+  - {x: 0.1, y: 0.5}
+  - {x: 0.1, y: 0.75}
+  - {x: 0.9, y: 0.25}
+  - {x: 0.9, y: 0.5}
+  - {x: 0.9, y: 0.75}
+  _prefab: {fileID: 3200171693777486239, guid: 8f0f53490c8acf44cbeec229be135fb9, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,6 +507,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a60a76983acc3ac4a963dca04458095f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerConfig:
+    Velocity: {x: 0, y: 0}
+    Body: {fileID: 367491460}
+    Acceleration: 8
+    Damping: 0.8
+    RotationSpeed: 200
 --- !u!1 &2114298032
 GameObject:
   m_ObjectHideFlags: 0
@@ -567,6 +599,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Asteroid
       objectReference: {fileID: 0}
+    - target: {fileID: 3745194995641503969, guid: f4c35722430e6724c99d8870502ab6a3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -624,7 +660,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7413106978687471683, guid: c11673fe0173ed54591f5d44967598fd, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

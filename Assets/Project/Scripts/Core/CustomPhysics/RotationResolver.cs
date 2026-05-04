@@ -1,17 +1,9 @@
 using System.Collections.Generic;
+using Project.Scripts.InputManageSystem;
 using UnityEngine;
 
 namespace Project.Scripts.Core.CustomPhysics
 {
-    public enum DirectionRotation
-    {
-        None = 0,
-        Up = 1,
-        Down = 2,
-        Left = 3,
-        Right = 4
-    }
-
     public class RotationResolver
     {
         private readonly Dictionary<DirectionRotation, Vector2> _directions = new()

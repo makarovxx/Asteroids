@@ -1,7 +1,7 @@
 using Project.Scripts.Core.CustomPhysics;
-using Project.Scripts.Core.InputManageSystem;
+using Project.Scripts.InputManageSystem;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using Zenject;
 
 namespace Project.Scripts.Core
 {
@@ -11,18 +11,19 @@ namespace Project.Scripts.Core
         [SerializeField] private float maxSpeed = 12f;
         [SerializeField] private float damping = 0.8f;
         [SerializeField] private float rotationSpeed = 720f;
-        
+        [SerializeField] private float angle;
         private RotationResolver _rotationResolver;
-        private Vector2 DirectionShipDefault => transform.right;
         private DesktopInput _input;
+        private Vector2 DirectionShipDefault => transform.right;
         private Vector2 _velocity;
 
-        private void Awake()
+        [Inject]
+        private void Construct(RotationResolver rotationResolver, DesktopInput input)
         {
-            _input = new DesktopInput();
-            _rotationResolver = new RotationResolver();
+            _rotationResolver = rotationResolver;
+            _input = input;
         }
-
+        
         private void Update()
         {
             HandleMovement();
@@ -71,6 +72,12 @@ namespace Project.Scripts.Core
         private void Move()
         {
             transform.Translate(_velocity * Time.deltaTime, Space.World);
+        }
+        [ContextMenu("ASd")]
+        protected void SetRotation()
+        {
+            float normalizedAngle = Mathf.DeltaAngle(0f, angle);
+            transform.rotation = Quaternion.Euler(0, 0, normalizedAngle);
         }
     }
 }

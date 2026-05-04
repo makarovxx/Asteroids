@@ -1,7 +1,6 @@
-using Project.Scripts.Core.CustomPhysics;
 using UnityEngine;
 
-namespace Project.Scripts.Core.InputManageSystem
+namespace Project.Scripts.InputManageSystem
 {
     public class DesktopInput
     {
