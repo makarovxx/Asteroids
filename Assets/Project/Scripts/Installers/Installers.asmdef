@@ -1,4 +1,4 @@
 {
 	"name": "Installers",
-	"references":[ "GUID:0d8beb7f090555447a6cf5ce9e54dbb4", "GUID:f479513b53d04e940843ad511300b951", "GUID:64b7a98fb8aa302418ef7bf9ffe79e45", "GUID:9e9a9e662c0ebb94c897ece722521978" ]
+	"references":[ "GUID:0d8beb7f090555447a6cf5ce9e54dbb4", "GUID:f479513b53d04e940843ad511300b951", "GUID:64b7a98fb8aa302418ef7bf9ffe79e45", "GUID:9e9a9e662c0ebb94c897ece722521978", "Core.Entities", "Core.Enemies.Factories", "Plugins" ]
 }

@@ -8,9 +8,10 @@ namespace Project.Scripts.Plugins
         
         void GetObject(T obj);
         bool TryGetObject(out T obj);
+        bool TryGetActiveObject(out T obj);
 
         void PushObjectsByCondition(Func<T, bool> condition);
-        
+
         void PushAllObjects();
     }
 }

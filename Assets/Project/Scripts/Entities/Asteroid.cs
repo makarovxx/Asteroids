@@ -14,5 +14,26 @@ namespace Project.Scripts.Entities
         {
             _physicsComponent = physicsComponent;
         }
+
+        private void FixedUpdate()
+        {
+            _physicsComponent?.FixedTick();
+        }
+
+        private void OnDisable()
+        {
+            _physicsComponent?.StopMove();
+        }
+
+        public void Spawn(Vector2 position, Vector2 direction, float speed)
+        {
+            transform.position = position;
+            _physicsComponent.Launch(direction, speed);
+        }
+
+        public void StopMove()
+        {
+            _physicsComponent.StopMove();
+        }
     }
 }

@@ -1,4 +1,4 @@
 {
 	"name": "Core.Entities",
-	"references":[ "GUID:7a4dd130d775ea44ba7d4e2b15939c8f", "Core.CustomPhysics" ]
+	"references":[ "GUID:7a4dd130d775ea44ba7d4e2b15939c8f", "Core.CustomPhysics", "Zenject" ]
 }

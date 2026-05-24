@@ -4,7 +4,9 @@
     "references": [
         "GUID:9e9a9e662c0ebb94c897ece722521978",
         "GUID:40f016549cad3264d9ee10f76dc8d0a7",
-        "GUID:64b7a98fb8aa302418ef7bf9ffe79e45"
+        "GUID:64b7a98fb8aa302418ef7bf9ffe79e45",
+        "GUID:7a4dd130d775ea44ba7d4e2b15939c8f",
+        "Zenject"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

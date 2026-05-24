@@ -179,7 +179,7 @@ MonoBehaviour:
   - {x: 0.9, y: 0.25}
   - {x: 0.9, y: 0.5}
   - {x: 0.9, y: 0.75}
-  _prefab: {fileID: 3200171693777486239, guid: 8f0f53490c8acf44cbeec229be135fb9, type: 3}
+  _asteroidSpeed: 3
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,6 +513,9 @@ MonoBehaviour:
     Acceleration: 8
     Damping: 0.8
     RotationSpeed: 200
+  _asteroidPrefab: {fileID: 3200171693777486239, guid: 8f0f53490c8acf44cbeec229be135fb9, type: 3}
+  _asteroidsContainer: {fileID: 870556500}
+  _asteroidsPoolSize: 10
 --- !u!1 &2114298032
 GameObject:
   m_ObjectHideFlags: 0

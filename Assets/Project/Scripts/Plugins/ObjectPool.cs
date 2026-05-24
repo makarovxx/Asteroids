@@ -8,12 +8,12 @@ namespace Project.Scripts.Plugins
     public class ObjectPool<T> : IPool<T> where T : MonoBehaviour, ICreatable
     {
         private readonly int _maxInstances;
-        private readonly ICreator<T> _creator;
+        private readonly IFactory<T> _factory;
         private readonly List<T> _pooledObjects;
 
-        protected ObjectPool(ICreator<T> creator, int maxInstances, Transform container)
+        public ObjectPool(IFactory<T> factory, int maxInstances, Transform container)
         {
-            _creator = creator;
+            _factory = factory;
             _maxInstances = maxInstances;
             _pooledObjects = new List<T>();
 
@@ -24,7 +24,7 @@ namespace Project.Scripts.Plugins
         {
             for (int i = 0; i < _maxInstances; i++)
             {
-                T obj = _creator.Create();
+                T obj = _factory.Create();
                 if(container) obj.transform.SetParent(container);
                 
                 PushObject(obj);
@@ -50,24 +50,26 @@ namespace Project.Scripts.Plugins
 
         public bool TryGetObjects(int count,out List<T> objects)
         {
-            objects = _pooledObjects.Where(obj => obj.gameObject.activeSelf).Take(count).ToList();
-            if (objects == null || objects.Count < count)
-            {
+            objects = _pooledObjects.Where(obj => !obj.gameObject.activeSelf).Take(count).ToList();
+            if (objects.Count < count)
                 return false;
-            }
-            else
-            {
-                objects.ForEach(GetObject);
-                return true;
-            }
+
+            objects.ForEach(GetObject);
+            return true;
         }
-        
+
         public bool TryGetObject(out T obj)
         {
             obj = _pooledObjects.FirstOrDefault(item => item.gameObject.activeSelf == false);
             if(obj)
                 obj.gameObject.SetActive(true);
-            
+
+            return obj;
+        }
+
+        public bool TryGetActiveObject(out T obj)
+        {
+            obj = _pooledObjects.FirstOrDefault(item => item.gameObject.activeSelf);
             return obj;
         }
 
