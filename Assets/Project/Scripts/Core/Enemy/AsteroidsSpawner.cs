@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Project.Scripts.Entities;
 using UnityEngine;

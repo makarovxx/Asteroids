@@ -9,10 +9,16 @@ namespace Project.Scripts.Core.CustomPhysics
         public Vector2 DirectionBodyDefault => Body.right;
         
         protected Transform Body;
-        protected float MaxSpeed;
+        protected float MaxSpeed = 12f;
         
         protected RotationResolver RotationResolver;
 
+        public EntityPhysicsBase(Transform body, RotationResolver rotationResolver)
+        {
+            Body = body;
+            RotationResolver = rotationResolver;
+        }
+        
         public EntityPhysicsBase(Transform body, Vector2 velocity, RotationResolver rotationResolver)
         {
             Body = body;

@@ -4,38 +4,43 @@ using Zenject;
 
 namespace Project.Scripts.Core.CustomPhysics
 {
-    public class DynamicPhysics : EntityPhysicsBase, IFixedTickable
+    public class ShipPhysics : EntityPhysicsBase, IFixedTickable
     {
         private float _acceleration;
         private float _damping;
         private float _rotationSpeed;
+        private DesktopInput _input;
         
         [Inject]
-        public DynamicPhysics(Transform body, Vector2 velocity, RotationResolver rotationResolver, float acceleration, float damping, float rotationSpeed) : base(body, velocity, rotationResolver)
+        public ShipPhysics(Transform body, Vector2 velocity, RotationResolver rotationResolver, float acceleration, float damping, float rotationSpeed, DesktopInput input) : base(body, velocity, rotationResolver)
         {
             _acceleration = acceleration;
             _damping = damping;
             _rotationSpeed = rotationSpeed;
+            _input = input;
         }
 
-        void IFixedTickable.FixedTick()
+        public void FixedTick()
         {
-            
+            HandleMovement(Time.fixedDeltaTime);
+            HandleRotation(Time.fixedDeltaTime);
         }
-        
-        public void Accelerate(float deltaTime)
+
+        private void Accelerate(float deltaTime)
         {
             Velocity += DirectionBodyDefault * _acceleration * deltaTime;
             Velocity = Vector2.ClampMagnitude(Velocity, MaxSpeed);
         }
-        
-        public void ApplyDamping(float deltaTime)
+
+        private void ApplyDamping(float deltaTime)
         {
             Velocity = Vector2.Lerp(Velocity, Vector2.zero, _damping * deltaTime);
         }
-        
-        public void RotateSmoothly(float deltaTime, DirectionRotation direction)
+
+        private void HandleRotation(float deltaTime)
         {
+            DirectionRotation direction = _input.GetRotationDirection();
+            
             if (direction == DirectionRotation.None)
                 return;
 
@@ -48,6 +53,16 @@ namespace Project.Scripts.Core.CustomPhysics
             );
 
             Body.rotation = Quaternion.Euler(0f, 0f, newAngle);
+        }
+        
+        private void HandleMovement(float deltaTime)
+        {
+            if (_input.IsThrusting())
+                Accelerate(deltaTime);
+            else
+                ApplyDamping(deltaTime);
+
+            Move(deltaTime);
         }
     }
 }
