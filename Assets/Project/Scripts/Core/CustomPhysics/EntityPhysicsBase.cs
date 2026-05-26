@@ -3,11 +3,13 @@ using Zenject;
 
 namespace Project.Scripts.Core.CustomPhysics
 {
-    public class EntityPhysicsBase
+    public class EntityPhysicsBase : IPhysicsObject
     {
         public Vector2 Velocity { get; protected set; }
         public Vector2 DirectionBodyDefault => Body.right;
-        
+
+        public bool IsActive => Body.gameObject.activeSelf;
+
         protected Transform Body;
         protected float MaxSpeed = 12f;
         
@@ -18,14 +20,10 @@ namespace Project.Scripts.Core.CustomPhysics
             Body = body;
             RotationResolver = rotationResolver;
         }
-        
-        public EntityPhysicsBase(Transform body, Vector2 velocity, RotationResolver rotationResolver)
-        {
-            Body = body;
-            Velocity = velocity;
-            RotationResolver = rotationResolver;
-        }
-        public virtual void Move(float deltaTime) => Body.Translate(Velocity * deltaTime, Space.World);
+
+        public virtual void Tick(float deltaTime) => Move(deltaTime);
+
+        protected void Move(float deltaTime) => Body.Translate(Velocity * deltaTime, Space.World);
 
         protected Vector2 GetPosition() => Body.position;
         

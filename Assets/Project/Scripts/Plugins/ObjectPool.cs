@@ -1,78 +1,64 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Project.Scripts.Plugins
 {
     public class ObjectPool<T> : IPool<T> where T : MonoBehaviour, ICreatable
     {
-        private readonly int _maxInstances;
-        private readonly ICreator<T> _creator;
-        private readonly List<T> _pooledObjects;
+        private readonly List<T> _objects;
 
-        protected ObjectPool(ICreator<T> creator, int maxInstances, Transform container)
+        public ObjectPool(ICreator<T> creator, int count, Transform container = null)
         {
-            _creator = creator;
-            _maxInstances = maxInstances;
-            _pooledObjects = new List<T>();
+            _objects = new List<T>(count);
 
-            AllocatePool(container);
+            Allocate(creator, count, container);
         }
 
-        private void AllocatePool(Transform container = null)
+        private void Allocate(ICreator<T> creator, int count, Transform container)
         {
-            for (int i = 0; i < _maxInstances; i++)
+            for (int i = 0; i < count; i++)
             {
-                T obj = _creator.Create();
-                if(container) obj.transform.SetParent(container);
-                
-                PushObject(obj);
-                _pooledObjects.Add(obj);
+                T obj = creator.Create();
+
+                if (container != null)
+                    obj.transform.SetParent(container);
+
+                obj.gameObject.SetActive(false);
+
+                _objects.Add(obj);
             }
         }
 
-        public void PushObjectsByCondition(Func<T, bool> condition)
-        {
-            for (int i = 0; i < _pooledObjects.Count; i++)
-            {
-                T obj = _pooledObjects[i];
-
-                if (!obj.gameObject.activeSelf)
-                    continue;
-
-                if (condition(obj))
-                    PushObject(obj);
-            }
-        }
-
-        public void PushAllObjects() => _pooledObjects.ForEach(PushObject);
-
-        public bool TryGetObjects(int count,out List<T> objects)
-        {
-            objects = _pooledObjects.Where(obj => obj.gameObject.activeSelf).Take(count).ToList();
-            if (objects == null || objects.Count < count)
-            {
-                return false;
-            }
-            else
-            {
-                objects.ForEach(GetObject);
-                return true;
-            }
-        }
-        
         public bool TryGetObject(out T obj)
         {
-            obj = _pooledObjects.FirstOrDefault(item => item.gameObject.activeSelf == false);
-            if(obj)
+            for (int i = 0; i < _objects.Count; i++)
+            {
+                if (_objects[i].gameObject.activeSelf)
+                    continue;
+
+                obj = _objects[i];
+
                 obj.gameObject.SetActive(true);
-            
-            return obj;
+
+                return true;
+            }
+
+            obj = null;
+
+            return false;
         }
 
-        public void PushObject(T obj) => obj.gameObject.SetActive(false);
-        
-        public void GetObject(T obj) => obj.gameObject.SetActive(true);
+        public void PushObject(T obj)
+        {
+            obj.gameObject.SetActive(false);
+        }
+
+        public void PushAllObjects()
+        {
+            for (int i = 0; i < _objects.Count; i++)
+            {
+                PushObject(_objects[i]);
+            }
+        }
     }
 }

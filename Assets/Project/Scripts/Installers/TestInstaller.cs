@@ -14,8 +14,24 @@ namespace Project.Scripts.Installers
         {
             Container.Bind<DesktopInput>().AsSingle();
             Container.Bind<RotationResolver>().AsSingle();
-            Container.BindInterfacesAndSelfTo<ShipPhysics>().AsSingle().WithArguments(_playerConfig.Body, _playerConfig.Velocity,
+            Container.BindInterfacesAndSelfTo<ShipPhysics>().AsSingle().WithArguments(_playerConfig.Body,
                 _playerConfig.Acceleration, _playerConfig.Damping, _playerConfig.RotationSpeed);
+            
+            Container.BindInterfacesAndSelfTo<PhysicsSystem>()
+                .AsSingle();
+            
+            RegisterShipPhysics();
+        }
+        
+        private void RegisterShipPhysics()
+        {
+            PhysicsSystem physicsSystem =
+                Container.Resolve<PhysicsSystem>();
+
+            ShipPhysics shipPhysics =
+                Container.Resolve<ShipPhysics>();
+
+            physicsSystem.Register(shipPhysics);
         }
     }
 }

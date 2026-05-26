@@ -1,4 +1,4 @@
 {
 	"name": "Core.Enemies.Factories",
-	"references":[ "Core.Entities" ]
+	"references":[ "Core.Entities", "Zenject", "Plugins", "Core.CustomPhysics" ]
 }

@@ -1,23 +1,29 @@
 using UnityEngine;
-using Zenject;
 
 namespace Project.Scripts.Core.CustomPhysics
 {
-    public class SolidPhysics : EntityPhysicsBase, IFixedTickable
+    public class SolidPhysics : EntityPhysicsBase
     {
         public SolidPhysics(Transform body, RotationResolver rotationResolver) : base(body, rotationResolver)
         {
         }
 
-        public void SetRotation(float angle)
+        public void Launch(Vector2 direction, float speed)
         {
-            Body.rotation = Quaternion.Euler(0, 0, angle);
+            SetVelocity(direction.normalized * speed);
         }
 
-        public void SetRandomRotation() => Body.rotation = Random.rotation;
-        public void FixedTick()
+        public void Stop()
         {
-            Move(Time.fixedDeltaTime);
+            StopMove();
+        }
+
+        public void SetRandomRotation()
+        {
+            float angle = Random.Range(0f, 360f);
+
+            Body.rotation =
+                Quaternion.Euler(0f, 0f, angle);
         }
     }
 }

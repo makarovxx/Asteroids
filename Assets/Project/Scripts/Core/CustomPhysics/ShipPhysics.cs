@@ -4,7 +4,7 @@ using Zenject;
 
 namespace Project.Scripts.Core.CustomPhysics
 {
-    public class ShipPhysics : EntityPhysicsBase, IFixedTickable
+    public class ShipPhysics : EntityPhysicsBase
     {
         private float _acceleration;
         private float _damping;
@@ -12,20 +12,20 @@ namespace Project.Scripts.Core.CustomPhysics
         private DesktopInput _input;
         
         [Inject]
-        public ShipPhysics(Transform body, Vector2 velocity, RotationResolver rotationResolver, float acceleration, float damping, float rotationSpeed, DesktopInput input) : base(body, velocity, rotationResolver)
+        public ShipPhysics(Transform body, RotationResolver rotationResolver, float acceleration, float damping, float rotationSpeed, DesktopInput input) : base(body, rotationResolver)
         {
             _acceleration = acceleration;
             _damping = damping;
             _rotationSpeed = rotationSpeed;
             _input = input;
         }
-
-        public void FixedTick()
+        
+        public override void Tick(float deltaTime)
         {
-            HandleMovement(Time.fixedDeltaTime);
-            HandleRotation(Time.fixedDeltaTime);
+            HandleMovement(deltaTime);
+            HandleRotation(deltaTime);
         }
-
+        
         private void Accelerate(float deltaTime)
         {
             Velocity += DirectionBodyDefault * _acceleration * deltaTime;
