@@ -15,8 +15,7 @@ namespace Project.Scripts.Core.Enemy
         private IPool<Asteroid> _pool;
 
         [Inject]
-        private void Construct(
-            IPool<Asteroid> pool)
+        private void Construct(IPool<Asteroid> pool)
         {
             _pool = pool;
         }

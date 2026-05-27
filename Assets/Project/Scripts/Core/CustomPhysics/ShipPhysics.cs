@@ -29,7 +29,7 @@ namespace Project.Scripts.Core.CustomPhysics
         private void Accelerate(float deltaTime)
         {
             Velocity += DirectionBodyDefault * _acceleration * deltaTime;
-            Velocity = Vector2.ClampMagnitude(Velocity, MaxSpeed);
+            Velocity = Vector2.ClampMagnitude(Velocity, MaxEntitySpeed);
         }
 
         private void ApplyDamping(float deltaTime)

@@ -2,7 +2,7 @@ using Project.Scripts.Core.CustomPhysics;
 using UnityEngine;
 using Zenject;
 
-namespace Project.Scripts.Core
+namespace Project.Scripts.Entities
 {
     public class Ship : MonoBehaviour
     {

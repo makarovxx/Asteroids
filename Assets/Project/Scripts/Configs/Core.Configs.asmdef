@@ -1,3 +1,4 @@
 {
-	"name": "Core.Configs"
+	"name": "Core.Configs",
+	"references":[ "GUID:40f016549cad3264d9ee10f76dc8d0a7" ]
 }

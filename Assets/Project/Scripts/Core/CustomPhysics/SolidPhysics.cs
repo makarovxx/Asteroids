@@ -22,8 +22,7 @@ namespace Project.Scripts.Core.CustomPhysics
         {
             float angle = Random.Range(0f, 360f);
 
-            Body.rotation =
-                Quaternion.Euler(0f, 0f, angle);
+            Body.rotation = Quaternion.Euler(0f, 0f, angle);
         }
     }
 }
