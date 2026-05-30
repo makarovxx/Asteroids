@@ -2,6 +2,15 @@ using UnityEngine;
 
 namespace Project.Scripts.Core.CustomPhysics
 {
+    public abstract class Entity : IPhysicsObject
+    {
+        public Vector2 Position;
+        public float Rotation;
+        protected readonly Transform Body;
+        public bool IsActive => Body.gameObject.activeSelf;
+        public abstract void Tick(float deltaTime);
+    }
+    
     public class EntityPhysicsBase : IPhysicsObject
     {
         protected const float MaxEntitySpeed = 12f;
@@ -11,9 +20,9 @@ namespace Project.Scripts.Core.CustomPhysics
             set => Body.position = value;
         }
         
-        protected Transform Body;
-        protected RotationResolver RotationResolver;
-        
+        protected readonly Transform Body;
+        protected readonly RotationResolver RotationResolver;
+
         public Vector2 Velocity { get; protected set; }
         protected Vector2 DirectionBodyDefault => Body.right;
 
@@ -28,8 +37,8 @@ namespace Project.Scripts.Core.CustomPhysics
         public virtual void Tick(float deltaTime) => Move(deltaTime);
 
         protected void Move(float deltaTime) => Body.Translate(Velocity * deltaTime, Space.World);
-        
-        protected void SetVelocity(Vector2 velocity) => Velocity = Vector2.ClampMagnitude(velocity, MaxEntitySpeed);
+
+        public void SetVelocity(Vector2 velocity) => Velocity = Vector2.ClampMagnitude(velocity, MaxEntitySpeed);
 
         protected void StopMove() => Velocity = Vector2.zero;
 

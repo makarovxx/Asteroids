@@ -1,6 +1,8 @@
+using System;
 using Project.Scripts.Core.CustomPhysics;
 using Project.Scripts.Plugins;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Project.Scripts.Entities
 {
@@ -26,6 +28,13 @@ namespace Project.Scripts.Entities
         public void SetRandomRotation()
         {
             _physics.SetRandomRotation();
+        }
+        
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            Vector2 direction =
+                Random.insideUnitCircle.normalized;
+            _physics.SetVelocity(direction);
         }
     }
 }

@@ -1,6 +1,6 @@
 namespace Project.Scripts.Plugins
 {
-    public interface ICreatable
+    public interface ICreatable 
     {
         
     }

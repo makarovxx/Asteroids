@@ -18,6 +18,8 @@ namespace Project.Scripts.Installers
 
             Container.Bind<IPool<Asteroid>>().To<ObjectPool<Asteroid>>().AsSingle()
                 .WithArguments(_poolSize, _asteroidsContainer);
+
+            // Container.Bind<IEntityFactory>().To<AsteroidsFactory>().AsSingle();
         }
     }
 }
