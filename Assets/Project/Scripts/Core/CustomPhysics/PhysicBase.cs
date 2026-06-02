@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Project.Scripts.Core.CustomPhysics
 {
-    public abstract class Entity : IPhysics
+    public abstract class PhysicBase : IPhysics
     {
         public Vector2 Position
         {
@@ -19,6 +19,12 @@ namespace Project.Scripts.Core.CustomPhysics
         public bool IsActive => Body.gameObject.activeSelf;
         
         protected Transform Body;
+
+        protected PhysicBase(Transform body)
+        {
+            Body = body;
+        }
+
         public abstract void Tick(float deltaTime);
     }
 }

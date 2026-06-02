@@ -4,31 +4,32 @@ using Zenject;
 
 namespace Project.Scripts.Core.CustomPhysics
 {
-    public class ShipPhysics : EntityPhysicsBase
+    public class ShipPhysics : MovingPhysics
     {
-        private float _acceleration;
-        private float _damping;
-        private float _rotationSpeed;
-        private DesktopInput _input;
-        
+        private readonly float _acceleration;
+        private readonly float _damping;
+        private readonly float _rotationSpeed;
+        private readonly DesktopInput _input;
+
         [Inject]
-        public ShipPhysics(Transform body, RotationResolver rotationResolver, float acceleration, float damping, float rotationSpeed, DesktopInput input) : base(body, rotationResolver)
+        public ShipPhysics(Transform body, RotationResolver rotationResolver, float acceleration, float damping,
+            float rotationSpeed, DesktopInput input) : base(body, rotationResolver)
         {
             _acceleration = acceleration;
             _damping = damping;
             _rotationSpeed = rotationSpeed;
             _input = input;
         }
-        
+
         public override void Tick(float deltaTime)
         {
             HandleMovement(deltaTime);
             HandleRotation(deltaTime);
         }
-        
+
         private void Accelerate(float deltaTime)
         {
-            Velocity += DirectionBodyDefault * _acceleration * deltaTime;
+            Velocity += DirectionBodyDefault * (_acceleration * deltaTime);
             Velocity = Vector2.ClampMagnitude(Velocity, MaxEntitySpeed);
         }
 
@@ -40,7 +41,7 @@ namespace Project.Scripts.Core.CustomPhysics
         private void HandleRotation(float deltaTime)
         {
             DirectionRotation direction = _input.GetRotationDirection();
-            
+
             if (direction == DirectionRotation.None)
                 return;
 
@@ -54,7 +55,7 @@ namespace Project.Scripts.Core.CustomPhysics
 
             Body.rotation = Quaternion.Euler(0f, 0f, newAngle);
         }
-        
+
         private void HandleMovement(float deltaTime)
         {
             if (_input.IsThrusting())

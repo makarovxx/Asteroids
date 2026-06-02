@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Project.Scripts.Core.CustomPhysics
 {
-    public class SolidPhysics : EntityPhysicsBase
+    public class SolidPhysics : MovingPhysics
     {
         public SolidPhysics(Transform body, RotationResolver rotationResolver) : base(body, rotationResolver)
         {
@@ -10,6 +10,12 @@ namespace Project.Scripts.Core.CustomPhysics
 
         public void Launch(Vector2 direction, float speed)
         {
+            if (direction == Vector2.zero)
+                direction = Random.insideUnitCircle.normalized;
+
+            if (direction == Vector2.zero)
+                direction = Vector2.right;
+
             SetVelocity(direction.normalized * speed);
         }
 

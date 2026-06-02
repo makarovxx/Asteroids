@@ -13,7 +13,7 @@ namespace Project.Scripts.Core.CustomPhysics
             _camera = camera;
         }
 
-        public void TeleportIfOutOfBounds(EntityPhysicsBase entity)
+        public void TeleportIfOutOfBounds(IPhysics entity)
         {
             Vector2 viewportPosition = _camera.WorldToViewportPoint(entity.Position);
 

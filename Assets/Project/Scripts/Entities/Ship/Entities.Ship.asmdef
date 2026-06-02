@@ -1,10 +1,9 @@
 {
-    "name": "Core.Configs",
+    "name": "Entities.Ship",
     "rootNamespace": "",
     "references": [
-        "GUID:40f016549cad3264d9ee10f76dc8d0a7",
-        "GUID:16c4681713266564fbcd939672c7c13d",
-        "Entities.Ship"
+        "GUID:9e9a9e662c0ebb94c897ece722521978",
+        "GUID:40f016549cad3264d9ee10f76dc8d0a7"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace Project.Scripts.Core.CustomPhysics
 {
-    public interface IPhysicsObject
+    public interface IPhysics
     {
         bool IsActive { get; }
         Vector2 Position { get; set; }
         float Rotation { get; }
-        void Tick(float deltaTime);
+        public void Tick(float deltaTime);
     }
 }

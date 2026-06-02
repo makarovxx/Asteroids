@@ -6,23 +6,24 @@ namespace Project.Scripts.Core.CustomPhysics
 {
     public class PhysicsSystem : IFixedTickable
     {
-        private readonly float _deltaTime = Time.fixedDeltaTime;
-        private readonly List<EntityPhysicsBase> _physicsObjects;
+        private readonly List<IPhysics> _physicsObjects;
         private readonly WorldBoundsTeleport _worldBoundsTeleport;
 
         public PhysicsSystem(WorldBoundsTeleport worldBoundsTeleport)
         {
             _worldBoundsTeleport = worldBoundsTeleport;
-            _physicsObjects = new List<EntityPhysicsBase>();
+            _physicsObjects = new List<IPhysics>();
         }
         
         void IFixedTickable.FixedTick()
         {
-            TickMovement();
+            float deltaTime = Time.fixedDeltaTime;
+
+            TickMovement(deltaTime);
             TickBoundsCheck();
         }
         
-        public void Register(EntityPhysicsBase physicsObject)
+        public void Register(IPhysics physicsObject)
         {
             if (_physicsObjects.Contains(physicsObject))
                 return;
@@ -30,17 +31,17 @@ namespace Project.Scripts.Core.CustomPhysics
             _physicsObjects.Add(physicsObject);
         }
 
-        private void TickMovement()
+        private void TickMovement(float deltaTime)
         {
             for (int i = 0; i < _physicsObjects.Count; i++)
             {
-                EntityPhysicsBase physicsObject =
+                IPhysics physics =
                     _physicsObjects[i];
 
-                if (!physicsObject.IsActive)
+                if (!physics.IsActive)
                     continue;
 
-                physicsObject.Tick(_deltaTime);
+                physics.Tick(deltaTime);
             }
         }
         
@@ -48,13 +49,13 @@ namespace Project.Scripts.Core.CustomPhysics
         {
             for (int i = 0; i < _physicsObjects.Count; i++)
             {
-                EntityPhysicsBase physicsObject =
+                IPhysics physics =
                     _physicsObjects[i];
 
-                if (!physicsObject.IsActive)
+                if (!physics.IsActive)
                     continue;
 
-                _worldBoundsTeleport.TeleportIfOutOfBounds(physicsObject);
+                _worldBoundsTeleport.TeleportIfOutOfBounds(physics);
             }
         }
     }

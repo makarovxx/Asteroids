@@ -2,30 +2,29 @@ using UnityEngine;
 
 namespace Project.Scripts.Core.CustomPhysics
 {
-    public class MovebalePhysics : PhysicBase
+    public abstract class MovingPhysics : PhysicBase, IMovingPhysics
     {
         protected const float MaxEntitySpeed = 12f;
 
         protected readonly RotationResolver RotationResolver;
 
         public Vector2 Velocity { get; protected set; }
-        protected Vector2 DirectionBodyDefault => Body.right;
+        public Vector2 DirectionBodyDefault => Body.right;
         
-        protected MovebalePhysics(Transform body, RotationResolver rotationResolver)
+        protected MovingPhysics(Transform body, RotationResolver rotationResolver) : base(body)
         {
-            Body = body;
             RotationResolver = rotationResolver;
         }
 
         public override void Tick(float deltaTime) => Move(deltaTime);
 
-        protected void Move(float deltaTime) => Body.Translate(Velocity * deltaTime, Space.World);
+        public virtual void Move(float deltaTime) => Body.Translate(Velocity * deltaTime, Space.World);
 
         public void SetVelocity(Vector2 velocity) => Velocity = Vector2.ClampMagnitude(velocity, MaxEntitySpeed);
 
-        protected void StopMove() => Velocity = Vector2.zero;
+        public void StopMove() => Velocity = Vector2.zero;
 
-        protected void SetRotation(float angle)
+        public void SetRotation(float angle)
         {
             float normalizedAngle = Mathf.DeltaAngle(0f, angle);
             Body.rotation = Quaternion.Euler(0, 0, normalizedAngle);

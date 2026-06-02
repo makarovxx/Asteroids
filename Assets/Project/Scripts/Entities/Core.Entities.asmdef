@@ -1,4 +1,18 @@
 {
-	"name": "Core.Entities",
-	"references":[ "GUID:7a4dd130d775ea44ba7d4e2b15939c8f", "Core.CustomPhysics", "GUID:64b7a98fb8aa302418ef7bf9ffe79e45" ]
+    "name": "Core.Entities",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7a4dd130d775ea44ba7d4e2b15939c8f",
+        "GUID:9e9a9e662c0ebb94c897ece722521978",
+        "GUID:64b7a98fb8aa302418ef7bf9ffe79e45"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

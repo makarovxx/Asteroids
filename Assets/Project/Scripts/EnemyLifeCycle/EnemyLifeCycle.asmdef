@@ -1,10 +1,13 @@
 {
-    "name": "Core.Configs",
+    "name": "EnemyLifeCycle",
     "rootNamespace": "",
     "references": [
+        "GUID:f479513b53d04e940843ad511300b951",
         "GUID:40f016549cad3264d9ee10f76dc8d0a7",
-        "GUID:16c4681713266564fbcd939672c7c13d",
-        "Entities.Ship"
+        "GUID:7a4dd130d775ea44ba7d4e2b15939c8f",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "Core.Entities.Enemies",
+        "GUID:9e9a9e662c0ebb94c897ece722521978"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
