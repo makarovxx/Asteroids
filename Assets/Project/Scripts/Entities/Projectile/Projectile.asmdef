@@ -1,0 +1,17 @@
+{
+    "name": "Projectile",
+    "rootNamespace": "",
+    "references": [
+        "Core.Entities",
+        "Core.CustomPhysics"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

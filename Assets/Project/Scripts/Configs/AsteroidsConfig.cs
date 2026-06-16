@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Project.Scripts.Entities;
 using Project.Scripts.Entities.Enemies.Asteroids;
 using UnityEngine;
 using UnityEngine.Serialization;

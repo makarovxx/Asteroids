@@ -354,6 +354,7 @@ Transform:
   - {fileID: 870556500}
   - {fileID: 298442899}
   - {fileID: 499400018}
+  - {fileID: 881232216}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &619394800
@@ -469,6 +470,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 599737949}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &881232215
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 881232216}
+  m_Layer: 0
+  m_Name: BulletContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &881232216
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881232215}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 599737949}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &910794207
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,6 +514,9 @@ GameObject:
   - component: {fileID: 910794210}
   - component: {fileID: 910794211}
   - component: {fileID: 910794212}
+  - component: {fileID: 910794213}
+  - component: {fileID: 910794215}
+  - component: {fileID: 910794214}
   m_Layer: 0
   m_Name: SCENECONTEXT
   m_TagString: Untagged
@@ -503,8 +538,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
   _monoInstallers:
+  - {fileID: 910794213}
+  - {fileID: 910794214}
   - {fileID: 910794210}
+  - {fileID: 910794215}
   - {fileID: 910794211}
+  - {fileID: 910794212}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -582,9 +621,9 @@ MonoBehaviour:
     - {x: 0.9, y: 0.25}
     - {x: 0.9, y: 0.5}
     - {x: 0.9, y: 0.75}
-    PoolSizeLarge: 6
-    PoolSizeMedium: 36
-    PoolSizeSmall: 108
+    PoolSizeLarge: 1
+    PoolSizeMedium: 3
+    PoolSizeSmall: 9
     SpeedMin: 2
     SpeedMax: 5
 --- !u!114 &910794212
@@ -601,10 +640,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _config:
     Prefab: {fileID: 5611323318800911292, guid: 5e3d982a39e22124d9d53890a7d7de43, type: 3}
-    SpawnInterval: 10
+    SpawnInterval: 3
     Speed: 2
     Container: {fileID: 298442899}
-    PoolSize: 10
+    PoolSize: 1
     SpawnPoints:
     - {x: 0.1, y: 0.25}
     - {x: 0.1, y: 0.5}
@@ -612,6 +651,49 @@ MonoBehaviour:
     - {x: 0.9, y: 0.25}
     - {x: 0.9, y: 0.5}
     - {x: 0.9, y: 0.75}
+--- !u!114 &910794213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910794207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80be5996e6864bc588168461ee0118d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &910794214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910794207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52947d8f9a25402db955684197c5e31a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &910794215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910794207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 041602e4fc5a4b97bb805937df5a89d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _weaponsConfig:
+    BulletPrefab: {fileID: 2901688277606451755, guid: 84ded3614a7be114aacd07e352ef9024, type: 3}
+    FirePoint: {fileID: 0}
+    BulletContainer: {fileID: 881232216}
+    PoolSizeBullets: 30
+    BulletLifeTime: 2.5
+    BulletSpeed: 7
 --- !u!1 &1171412854
 GameObject:
   m_ObjectHideFlags: 0
@@ -731,7 +813,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1922282710
 RectTransform:
   m_ObjectHideFlags: 0

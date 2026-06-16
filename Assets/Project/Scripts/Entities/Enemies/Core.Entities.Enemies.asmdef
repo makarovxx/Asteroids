@@ -1,4 +1,18 @@
 {
-	"name": "Core.Entities.Enemies",
-	"references":[ "GUID:40f016549cad3264d9ee10f76dc8d0a7", "GUID:9e9a9e662c0ebb94c897ece722521978" ]
+    "name": "Core.Entities.Enemies",
+    "rootNamespace": "",
+    "references": [
+        "Core.Entities",
+        "Core.CustomPhysics",
+        "Zenject"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

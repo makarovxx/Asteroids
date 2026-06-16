@@ -1,32 +1,42 @@
 using UnityEngine;
-using Zenject;
 
 namespace Project.Scripts.Core.CustomPhysics
 {
     public class FollowPhysics : MovingPhysics
     {
-        private readonly IPhysics _target;
+        private readonly ShipPhysicsProvider _shipProvider;
         private readonly float _speed;
-        
-        [Inject]
-        public FollowPhysics(Transform body, RotationResolver rotationResolver, IPhysics target, float speed) : base(
-            body, rotationResolver)
+
+        public FollowPhysics(
+            Transform body,
+            RotationResolver rotationResolver,
+            ShipPhysicsProvider shipProvider,
+            float speed)
+            : base(body, rotationResolver)
         {
-            _target = target;
+            _shipProvider = shipProvider;
             _speed = speed;
         }
 
-        public override void Move(float deltaTime)
+        public override void Tick(float deltaTime)
         {
-            if (_target.IsActive)
-            {
-                Vector2 direction =
-                    (_target.Position - Position).normalized;
+            TryUpdateDirection();
+            Move(deltaTime);
+        }
 
-                SetVelocity(direction * _speed);
+        private void TryUpdateDirection()
+        {
+            IPhysics target = _shipProvider.PhysicsTarget;
 
-                base.Move(deltaTime);
-            }
+            if (!target.IsActive)
+                return;
+
+            Vector2 direction = (target.Position - Position).normalized;
+            
+            if (direction == Vector2.zero)
+                return;
+
+            SetVelocity(direction * _speed);
         }
     }
 }

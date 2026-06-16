@@ -10,8 +10,7 @@ namespace Project.Scripts.Core.CustomPhysics
         private readonly float _damping;
         private readonly float _rotationSpeed;
         private readonly DesktopInput _input;
-
-        [Inject]
+        
         public ShipPhysics(Transform body, RotationResolver rotationResolver, float acceleration, float damping,
             float rotationSpeed, DesktopInput input) : base(body, rotationResolver)
         {
@@ -58,7 +57,7 @@ namespace Project.Scripts.Core.CustomPhysics
 
         private void HandleMovement(float deltaTime)
         {
-            if (_input.IsThrusting())
+            if (_input.IsAccelerateInput())
                 Accelerate(deltaTime);
             else
                 ApplyDamping(deltaTime);

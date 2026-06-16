@@ -4,13 +4,14 @@ using Cysharp.Threading.Tasks;
 using Project.Scripts.Configs;
 using Project.Scripts.Entities.Enemies.Asteroids;
 using Project.Scripts.Plugins;
+using Project.Scripts.Signals;
 using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
 
 namespace Project.Scripts.EnemyLifeCycle
 {
-    public class AsteroidLifeCycleController : IInitializable, IDisposable
+    public class AsteroidLifeCycleController : IInitializable, IDisposable, ITickable
     {
         private readonly AsteroidsConfig _config;
 
@@ -23,6 +24,7 @@ namespace Project.Scripts.EnemyLifeCycle
         private CancellationTokenSource _cts;
 
         private const int SplitCount = 3;
+        private SignalBus _signalBus;
 
         [Inject]
         public AsteroidLifeCycleController(
@@ -30,90 +32,145 @@ namespace Project.Scripts.EnemyLifeCycle
             IPool<MediumAsteroid> poolMedium,
             IPool<SmallAsteroid> poolSmall,
             AsteroidsConfig config,
-            Camera camera)
+            Camera camera, SignalBus signalBus)
         {
             _poolLarge = poolLarge;
             _poolMedium = poolMedium;
             _poolSmall = poolSmall;
             _config = config;
             _camera = camera;
+            _signalBus = signalBus;
         }
 
-        public void Initialize()
+        void IInitializable.Initialize()
         {
+            _signalBus.Subscribe<EnemyHitByWeaponSignal>(DespawnAsteroid);
             _cts = new CancellationTokenSource();
             RunSpawnLoop(_cts.Token).Forget();
         }
 
-        public void Dispose()
+        void IDisposable.Dispose()
         {
+            _signalBus.Unsubscribe<EnemyHitByWeaponSignal>(DespawnAsteroid);
             _cts?.Cancel();
             _cts?.Dispose();
             _cts = null;
         }
 
-        private async UniTaskVoid RunSpawnLoop(CancellationToken ct)
+        void ITickable.Tick()
+        {
+            // TryDespawnLarge();
+            // TryDespawnMedium();
+            // TryDespawnSmall();
+        }
+
+        private void DespawnAsteroid(EnemyHitByWeaponSignal signal)
+        {
+            
+            switch (signal.EnemyDestroyed)
+            {
+                case LargeAsteroid largeAsteroid:
+                {
+                    DespawnLarge(largeAsteroid);
+                    break;
+                }
+                case MediumAsteroid mediumAsteroid:
+                {
+                    DespawnMedium(mediumAsteroid);
+                    break;
+                }
+                case SmallAsteroid smallAsteroid:
+                {
+                    DespawnSmall(smallAsteroid);
+                    break;
+                }
+            }
+        }
+
+        private void TryDespawnLarge()
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                if (!_poolLarge.TryGetActiveObject(out var largeAsteroid))
+                    return;
+
+                DespawnLarge(largeAsteroid);
+            }
+        }
+
+        private void TryDespawnMedium()
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                if (!_poolMedium.TryGetActiveObject(out var mediumAsteroid))
+                {
+                    return;
+                }
+
+                DespawnMedium(mediumAsteroid);
+                Debug.Log("Despawned Active Large Asteroid");
+            }
+        }
+
+        private void TryDespawnSmall()
+        {
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                if (!_poolSmall.TryGetActiveObject(out var smallAsteroid))
+                {
+                    Debug.Log("Не найден Active Small Asteroid");
+                    return;
+                }
+
+                DespawnSmall(smallAsteroid);
+                Debug.Log("Despawned Active Large Asteroid");
+            }
+        }
+
+        private async UniTask RunSpawnLoop(CancellationToken ct)
         {
             while (true)
             {
-                bool cancelled = await UniTask
-                    .Delay(
-                        TimeSpan.FromSeconds(_config.SpawnInterval),
-                        cancellationToken: ct)
+                bool cancelled = await UniTask.Delay(TimeSpan.FromSeconds(_config.SpawnInterval), cancellationToken: ct)
                     .SuppressCancellationThrow();
 
                 if (cancelled)
                     return;
 
-                SpawnAsteroid(_poolLarge, GetRandomSpawnPosition(), _config.SpeedMin, _config.SpeedMax);
+                SpawnAsteroid(_poolLarge, GetRandomSpawnPosition());
             }
         }
 
-        private void SpawnAsteroid<TAsteroid>(
-            IPool<TAsteroid> pool,
-            Vector2 position,
-            float speedMin,
-            float speedMax,
-            Vector2? direction = null)
-            where TAsteroid : Asteroid
+        private void SpawnAsteroid<TAsteroid>(IPool<TAsteroid> pool, Vector2 position) where TAsteroid : Asteroid
         {
             if (!pool.TryGetObject(out TAsteroid asteroid))
                 return;
-            
+
+
             asteroid.Physics.Position = position;
-            asteroid.SetRandomRotation();
-
-            Vector2 dir = direction ?? Random.insideUnitCircle.normalized;
-            float speed = Random.Range(speedMin, speedMax);
-
-            asteroid.Launch(dir, speed);
+            Vector2 dir = Random.insideUnitCircle.normalized;
+            asteroid.Physics.SetVelocity(dir);
         }
-        
-        public void DespawnLarge(LargeAsteroid asteroid)
+
+        private void DespawnLarge(LargeAsteroid asteroid)
         {
             Vector2 spawnOrigin = asteroid.transform.position;
 
             ReturnToPool(asteroid, _poolLarge);
 
-            SpawnChildren(_poolMedium, spawnOrigin, _config.SpeedMin, _config.SpeedMax);
+            SpawnChildren(_poolMedium, spawnOrigin).Forget();
         }
 
-        /// <summary>
-        /// Деспаунит MediumAsteroid и спауним из его позиции 3 Small.
-        /// </summary>
-        public void DespawnMedium(MediumAsteroid asteroid)
+        private void DespawnMedium(MediumAsteroid asteroid)
         {
             Vector2 spawnOrigin = asteroid.transform.position;
 
             ReturnToPool(asteroid, _poolMedium);
 
-            SpawnChildren(_poolSmall, spawnOrigin, _config.SpeedMin, _config.SpeedMax);
+            SpawnChildren(_poolSmall, spawnOrigin).Forget();
         }
 
-        /// <summary>
-        /// Деспаунит SmallAsteroid — сплит не нужен.
-        /// </summary>
-        public void DespawnSmall(SmallAsteroid asteroid)
+        private void DespawnSmall(SmallAsteroid asteroid)
         {
             ReturnToPool(asteroid, _poolSmall);
         }
@@ -127,18 +184,14 @@ namespace Project.Scripts.EnemyLifeCycle
         /// Направления равномерно распределены по кругу (каждые 120°)
         /// со случайным начальным углом — осколки не летят в одну точку.
         /// </summary>
-        private void SpawnChildren<TChild>(
-            IPool<TChild> childPool,
-            Vector2 origin,
-            float speedMin,
-            float speedMax)
-            where TChild : Asteroid
+        private async UniTask SpawnChildren<TChild>(IPool<TChild> childPool, Vector2 origin) where TChild : Asteroid
         {
+            await UniTask.DelayFrame(3);
             Vector2[] directions = GetSpreadDirections(SplitCount);
 
-            foreach (Vector2 dir in directions)
+            foreach (Vector2 _ in directions)
             {
-                SpawnAsteroid(childPool, origin, speedMin, speedMax, dir);
+                SpawnAsteroid(childPool, origin);
             }
         }
 
@@ -165,10 +218,10 @@ namespace Project.Scripts.EnemyLifeCycle
         //  Утилиты
         // ─────────────────────────────────────────────────────────
 
-        private void ReturnToPool<TAsteroid>(TAsteroid asteroid, IPool<TAsteroid> pool)
-            where TAsteroid : Asteroid
+        private void ReturnToPool<TAsteroid>(TAsteroid asteroid, IPool<TAsteroid> pool) where TAsteroid : Asteroid
         {
-            asteroid.Stop();
+            asteroid.Physics.StopMove();
+
             pool.PushObject(asteroid);
         }
 

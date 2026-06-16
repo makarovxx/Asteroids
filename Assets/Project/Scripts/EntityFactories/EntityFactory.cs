@@ -7,7 +7,7 @@ using Zenject;
 namespace Project.Scripts.EntityFactories
 {
     public class EntityFactory<TEntity, TPhysics> : IEntityFactory<TEntity>
-        where TEntity : PhysicalEntity<TPhysics>
+        where TEntity : Entity<TPhysics>
         where TPhysics : PhysicBase
     {
         private readonly TEntity _prefab;
@@ -26,7 +26,6 @@ namespace Project.Scripts.EntityFactories
             TEntity entity = Container.InstantiatePrefabForComponent<TEntity>(_prefab);
 
             TPhysics physics = CreatePhysics(entity);
-            Container.BindInstance(physics).AsTransient();
             _physicsSystem.Register(physics);
             entity.Init(physics);
 
@@ -36,19 +35,6 @@ namespace Project.Scripts.EntityFactories
         protected virtual TPhysics CreatePhysics(TEntity entity)
         {
             return Container.Instantiate<TPhysics>(new object[] { entity.transform });
-        }
-    }
-
-    public class AsteroidFactory<T> : ICreator<T> where T : Asteroid
-    {
-        private readonly Asteroid _prefab;
-        protected readonly DiContainer Container;
-        private readonly RotationResolver _rotationResolver;
-        public T Create()
-        {
-            var entity = Container.InstantiatePrefabForComponent<T>(_prefab);
-            var physics = Container.Instantiate<SolidPhysics>(new object[] { entity.transform, });
-            return null;
         }
     }
 }

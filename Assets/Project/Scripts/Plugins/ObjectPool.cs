@@ -8,7 +8,8 @@ namespace Project.Scripts.Plugins
         private readonly List<T> _objects;
         private readonly ICreator<T> _creator;
         private readonly Transform _container;
-
+        
+        
         public ObjectPool(ICreator<T> creator, int count, Transform container = null)
         {
             _objects = new List<T>(count);

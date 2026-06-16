@@ -18,6 +18,8 @@ namespace Project.Scripts.Core.CustomPhysics
         
         public bool IsActive => Body.gameObject.activeSelf;
         
+        public bool CanMove { get; set; }
+        
         protected Transform Body;
 
         protected PhysicBase(Transform body)

@@ -2,8 +2,9 @@
     "name": "Entities.Ship",
     "rootNamespace": "",
     "references": [
-        "GUID:9e9a9e662c0ebb94c897ece722521978",
-        "GUID:40f016549cad3264d9ee10f76dc8d0a7"
+        "Core.CustomPhysics",
+        "Core.Entities",
+        "Weapons"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

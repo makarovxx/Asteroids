@@ -8,6 +8,7 @@ namespace Project.Scripts.Core.CustomPhysics
     {
         private readonly List<IPhysics> _physicsObjects;
         private readonly WorldBoundsTeleport _worldBoundsTeleport;
+        private readonly float _deltaTime = Time.fixedDeltaTime;
 
         public PhysicsSystem(WorldBoundsTeleport worldBoundsTeleport)
         {
@@ -17,9 +18,7 @@ namespace Project.Scripts.Core.CustomPhysics
         
         void IFixedTickable.FixedTick()
         {
-            float deltaTime = Time.fixedDeltaTime;
-
-            TickMovement(deltaTime);
+            TickMovement(_deltaTime);
             TickBoundsCheck();
         }
         

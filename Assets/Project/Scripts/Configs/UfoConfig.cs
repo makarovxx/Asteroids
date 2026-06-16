@@ -10,7 +10,7 @@ namespace Project.Scripts.Configs
     {
         public Ufo Prefab;
         public int SpawnInterval = 10;
-        public int Speed;
+        public float Speed;
         public Transform Container;
         public int PoolSize;
         public List<Vector2> SpawnPoints;

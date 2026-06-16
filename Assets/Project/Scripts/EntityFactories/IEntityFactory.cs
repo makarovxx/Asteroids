@@ -4,7 +4,7 @@ using Project.Scripts.Plugins;
 namespace Project.Scripts.EntityFactories
 {
     public interface IEntityFactory<TEntity> : ICreator<TEntity>
-        where TEntity : PhysicalEntity
+        where TEntity : Entity
     {
     }
 }

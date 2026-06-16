@@ -4,58 +4,74 @@ using Cysharp.Threading.Tasks;
 using Project.Scripts.Configs;
 using Project.Scripts.Entities.Enemies.Ufo;
 using Project.Scripts.Plugins;
+using Project.Scripts.Signals;
 using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
 
 namespace Project.Scripts.EnemyLifeCycle
 {
-    public class UfoLifeCycleController : IInitializable, IDisposable
+    public class UfoLifeCycleController : IInitializable, IDisposable, ITickable
     {
+        private readonly UfoConfig _config;
         private readonly IPool<Ufo> _pool;
-        private readonly UfoConfig  _config;
-        private readonly Camera     _camera;
+        private readonly Camera _camera;
+        private readonly SignalBus _signalBus;
 
         private CancellationTokenSource _cts;
 
         [Inject]
-        public UfoLifeCycleController(
-            IPool<Ufo> pool,
-            UfoConfig  config,
-            Camera     camera)
+        public UfoLifeCycleController(IPool<Ufo> pool, UfoConfig config, Camera camera, SignalBus signalBus)
         {
-            _pool   = pool;
+            _pool = pool;
             _config = config;
             _camera = camera;
+            _signalBus = signalBus;
         }
 
-        // ─────────────────────────────────────────────────────────
-        //  IInitializable / IDisposable
-        // ─────────────────────────────────────────────────────────
 
-        public void Initialize()
+        void IInitializable.Initialize()
         {
+            _signalBus.Subscribe<EnemyHitByWeaponSignal>(DespawnUfo);
             _cts = new CancellationTokenSource();
             RunSpawnLoop(_cts.Token).Forget();
         }
 
-        public void Dispose()
+        void IDisposable.Dispose()
         {
+            _signalBus.Unsubscribe<EnemyHitByWeaponSignal>(DespawnUfo);
             _cts?.Cancel();
             _cts?.Dispose();
             _cts = null;
         }
 
-        // ─────────────────────────────────────────────────────────
-        //  UniTask: бесконечный спавн
-        // ─────────────────────────────────────────────────────────
 
-        private async UniTaskVoid RunSpawnLoop(CancellationToken ct)
+        void ITickable.Tick()
+        {
+            // if (Input.GetKeyDown(KeyCode.Y))
+            //     TryDespawnUfo();
+        }
+
+        // private void TryDespawnUfo()
+        // {
+        //     if (!_pool.TryGetActiveObject(out Ufo ufo))
+        //     {
+        //         Debug.Log("[UFO] Нет активных UFO для деспауна");
+        //         return;
+        //     }
+        //
+        //     // DespawnUfo(ufo);
+        // }
+
+
+        private async UniTask RunSpawnLoop(CancellationToken ct)
         {
             while (true)
             {
                 bool cancelled = await UniTask
-                    .Delay(TimeSpan.FromSeconds(_config.SpawnInterval), cancellationToken: ct)
+                    .Delay(
+                        TimeSpan.FromSeconds(_config.SpawnInterval),
+                        cancellationToken: ct)
                     .SuppressCancellationThrow();
 
                 if (cancelled)
@@ -65,31 +81,24 @@ namespace Project.Scripts.EnemyLifeCycle
             }
         }
 
-        // ─────────────────────────────────────────────────────────
-        //  Спавн / Деспавн
-        // ─────────────────────────────────────────────────────────
-
         private void SpawnUfo()
         {
             if (!_pool.TryGetObject(out Ufo ufo))
                 return;
 
-            ufo.transform.position = GetRandomSpawnPosition();
+            Vector2 spawnPosition = GetRandomSpawnPosition();
+
+            ufo.Physics.Position = spawnPosition;
         }
 
-        /// <summary>
-        /// Деспаунит UFO — вызывается системой столкновений или оружием.
-        /// Метод публичный: CollisionSystem / ProjectileHitSystem дёргают его
-        /// через AsteroidLifeCycleController или напрямую.
-        /// </summary>
-        public void Despawn(Ufo ufo)
+        private void DespawnUfo(EnemyHitByWeaponSignal enemyHitByWeaponSignal)
         {
-            _pool.PushObject(ufo);
+            if (enemyHitByWeaponSignal.EnemyDestroyed is Ufo ufo)
+            {
+                ufo.Physics.StopMove();
+                _pool.PushObject(ufo);
+            }
         }
-
-        // ─────────────────────────────────────────────────────────
-        //  Утилиты
-        // ─────────────────────────────────────────────────────────
 
         private Vector2 GetRandomSpawnPosition()
         {

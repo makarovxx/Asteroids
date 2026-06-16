@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace Project.Scripts.InputManageSystem
 {
-    public class DesktopInput
+    public class DesktopInput : IInputStrategy
     {
         public DirectionRotation GetRotationDirection()
         {
@@ -14,9 +16,43 @@ namespace Project.Scripts.InputManageSystem
             return DirectionRotation.None;
         }
 
-        public bool IsThrusting()
+        public bool IsAccelerateInput()
         {
             return Input.GetKey(KeyCode.Space);
         }
+
+        public bool IsFireBulletLauncher()
+        {
+            return Input.GetKeyUp(KeyCode.F);
+        }
+
+        public bool IsLaserFire()
+        {
+            return Input.GetKeyUp(KeyCode.L);
+        }
+    }
+
+    public class InputManager : ITickable
+    {
+        private readonly IReadOnlyList<IInputStrategy> _strategies;
+
+        public InputManager(IEnumerable<IInputStrategy> strategies)
+        {
+            _strategies = new List<IInputStrategy>();
+        }
+
+        public void Tick()
+        {
+            
+        }
+    }
+
+    public interface IInputStrategy
+    {
+        bool IsAccelerateInput();
+
+        bool IsFireBulletLauncher();
+
+        bool IsLaserFire();
     }
 }

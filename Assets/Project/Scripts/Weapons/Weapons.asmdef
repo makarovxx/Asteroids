@@ -1,0 +1,23 @@
+{
+    "name": "Weapons",
+    "rootNamespace": "",
+    "references": [
+        "Core.CustomPhysics",
+        "InputManageSystem",
+        "Zenject",
+        "Projectile",
+        "Plugins",
+        "Core.Entities",
+        "UniTask",
+        "Signals"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

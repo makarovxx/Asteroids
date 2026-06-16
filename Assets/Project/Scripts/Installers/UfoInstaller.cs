@@ -1,32 +1,25 @@
 using Project.Scripts.Configs;
-using Project.Scripts.Core.CustomPhysics;
 using Project.Scripts.EnemyLifeCycle;
 using Project.Scripts.Entities.Enemies.Ufo;
 using Project.Scripts.EntityFactories;
 using Project.Scripts.Plugins;
 using UnityEngine;
 using Zenject;
-
+ 
 namespace Project.Scripts.Installers
 {
     public class UfoInstaller : MonoInstaller
     {
         [SerializeField] private UfoConfig _config;
-
+ 
         public override void InstallBindings()
         {
-                Container
-                    .Bind<IPhysics>()
-                    .To<ShipPhysics>()
-                    .FromResolve()
-                    .AsSingle().Lazy();
-            
-            BindFactory();
-            BindPool();
-            BindController();
+            BindUfoFactory();
+            BindUfoPool();
+            BindUfoLifeCycle();
         }
-
-        private void BindFactory()
+ 
+        private void BindUfoFactory()
         {
             Container
                 .Bind<ICreator<Ufo>>()
@@ -34,8 +27,8 @@ namespace Project.Scripts.Installers
                 .AsSingle()
                 .WithArguments(_config.Prefab, _config.Speed);
         }
-
-        private void BindPool()
+ 
+        private void BindUfoPool()
         {
             Container
                 .Bind<IPool<Ufo>>()
@@ -44,8 +37,8 @@ namespace Project.Scripts.Installers
                 .WithArguments(_config.PoolSize, _config.Container)
                 .NonLazy();
         }
-
-        private void BindController()
+ 
+        private void BindUfoLifeCycle()
         {
             Container
                 .BindInterfacesTo<UfoLifeCycleController>()
