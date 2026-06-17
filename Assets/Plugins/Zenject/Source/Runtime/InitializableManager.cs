@@ -62,7 +62,8 @@ namespace Zenject
             }
 #endif
 
-            foreach (var initializable in _initializables)
+            foreach (var initializable 
+                     in _initializables)
             {
                 try
                 {

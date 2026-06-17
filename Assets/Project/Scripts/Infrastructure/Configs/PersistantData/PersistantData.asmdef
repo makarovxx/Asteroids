@@ -1,0 +1,4 @@
+{
+	"name": "PersistantData",
+	"references":[ "Core.Entities.Enemies", "Entities.Ship", "Projectile" ]
+}

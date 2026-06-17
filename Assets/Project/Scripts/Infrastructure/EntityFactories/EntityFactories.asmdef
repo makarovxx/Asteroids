@@ -1,0 +1,23 @@
+{
+    "name": "EntityFactories",
+    "rootNamespace": "",
+    "references": [
+        "Core.Entities",
+        "Core.CustomPhysics",
+        "Zenject",
+        "Plugins",
+        "Entities.Ship",
+        "Core.Entities.Enemies",
+        "PersistantData",
+        "SerializableData"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

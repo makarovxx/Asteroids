@@ -4,12 +4,12 @@ namespace Project.Scripts.Core.CustomPhysics
 {
     public abstract class MovingPhysics : PhysicBase, IMovingPhysics
     {
-        protected const float MaxEntitySpeed = 12f;
+        protected const float MaxEntitySpeed = 5f;
 
         protected readonly RotationResolver RotationResolver;
 
         public Vector2 Velocity { get; protected set; }
-        public Vector2 DirectionBodyDefault => Body.right;
+        public Vector2 DirectionBody => Body.right;
         
         protected MovingPhysics(Transform body, RotationResolver rotationResolver) : base(body)
         {
@@ -29,5 +29,6 @@ namespace Project.Scripts.Core.CustomPhysics
             float normalizedAngle = Mathf.DeltaAngle(0f, angle);
             Body.rotation = Quaternion.Euler(0, 0, normalizedAngle);
         }
+        
     }
 }

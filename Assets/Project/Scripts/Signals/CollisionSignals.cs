@@ -1,4 +1,4 @@
-using Project.Scripts.Entities;
+using Project.Scripts.Gameplay.Entities;
 
 namespace Project.Scripts.Signals
 {

@@ -1,0 +1,23 @@
+{
+    "name": "EnemyLifeCycle",
+    "rootNamespace": "",
+    "references": [
+        "Core.Entities",
+        "Plugins",
+        "Core.Entities.Enemies",
+        "Core.CustomPhysics",
+        "Zenject",
+        "UniTask",
+        "Signals",
+        "SerializableData"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

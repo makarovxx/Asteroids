@@ -1,0 +1,33 @@
+{
+    "name": "Installers",
+    "rootNamespace": "",
+    "references": [
+        "Zenject",
+        "InputManageSystem",
+        "Core.CustomPhysics",
+        "Core.Entities",
+        "Plugins",
+        "EnemyLifeCycle",
+        "Core.Entities.Enemies",
+        "Entities.Ship",
+        "EntityFactories",
+        "Core.CollisionSystem",
+        "Weapons",
+        "Projectile",
+        "Signals",
+        "PersistantData",
+        "SerializableData",
+        "ShipHealth",
+        "UI",
+        "MVVM"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

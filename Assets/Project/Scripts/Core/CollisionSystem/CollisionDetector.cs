@@ -1,4 +1,4 @@
-using Project.Scripts.Entities;
+using Project.Scripts.Gameplay.Entities;
 using UnityEngine;
 using Zenject;
 
@@ -22,7 +22,7 @@ namespace Project.Scripts.Core.CollisionSystem
             if (!other.TryGetComponent<CollisionDetector>(out var otherDetector))
                 return;
             
-            if (GetInstanceID() > otherDetector.GetInstanceID())
+            if (!_collisionSystem.CanCollide(_owner, otherDetector._owner))
                 return;
 
             _collisionSystem.HandleCollision(_owner, otherDetector._owner);

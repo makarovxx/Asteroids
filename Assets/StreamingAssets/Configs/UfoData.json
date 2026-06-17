@@ -1,0 +1,6 @@
+{
+  "PoolSize": 10,
+  "SpawnInterval": 15,
+  "Speed": 2,
+  "MaxActiveAsteroids": 30
+}

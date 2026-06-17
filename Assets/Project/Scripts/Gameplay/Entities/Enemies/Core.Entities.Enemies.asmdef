@@ -1,0 +1,20 @@
+{
+    "name": "Core.Entities.Enemies",
+    "rootNamespace": "",
+    "references": [
+        "Core.Entities",
+        "Core.CustomPhysics",
+        "Zenject",
+        "Core.CollisionSystem",
+        "Signals"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,24 +1,11 @@
 using Project.Scripts.Core.CustomPhysics;
-using Project.Scripts.Entities;
+using Project.Scripts.Gameplay.Entities;
 using Project.Scripts.Signals;
 using UnityEngine;
 using Zenject;
 
 namespace Project.Scripts.Core.CollisionSystem
 {
-    /// <summary>
-    /// Центральная система обработки столкновений. Чистый C#, без MonoBehaviour.
-    ///
-    /// Ответственности:
-    ///   1. Получить пару сущностей от CollisionDetector
-    ///   2. Запросить реакцию у CollisionMatrix
-    ///   3. Применить математику (Bounce/Straight) через Calculator
-    ///   4. Отправить сигнал в SignalBus
-    ///
-    /// Дедупликация: решается НА СТОРОНЕ CollisionDetector через сравнение
-    /// GetInstanceID() — только сторона с меньшим ID вызывает этот метод.
-    /// CollisionSystem не знает об этом и не хранит состояние кадра.
-    /// </summary>
     public class CollisionSystem
     {
         private readonly CollisionMatrix _matrix;
@@ -36,9 +23,11 @@ namespace Project.Scripts.Core.CollisionSystem
             _signalBus = signalBus;
         }
 
-        // ─────────────────────────────────────────────────────────
-        //  Точка входа — вызывается только от стороны с меньшим ID
-        // ─────────────────────────────────────────────────────────
+
+        public bool CanCollide(ICollidable a, ICollidable b)
+        {
+            return a.CollisionPriority > b.CollisionPriority;
+        }
 
         public void HandleCollision(Entity ownerA, Entity ownerB)
         {
@@ -63,20 +52,22 @@ namespace Project.Scripts.Core.CollisionSystem
         private void ProcessBounce(Entity a, Entity b)
         {
             if (a.Physics is not IMovingPhysics physA) return;
+
             if (b.Physics is not IMovingPhysics physB) return;
 
             Vector2 posA = a.Physics.Position;
             Vector2 posB = b.Physics.Position;
 
             Vector2 normalA = _calculator.GetCollisionNormal(posA, posB);
+
             Vector2 normalB = -normalA;
 
-            Vector2 newVelocityA = _calculator.CalculateBounce(physA.Velocity, normalA);
-            Vector2 newVelocityB = _calculator.CalculateBounce(physB.Velocity, normalB);
+            Vector2 newVelocityA = _calculator.CalculateBounce(normalA, physA.Velocity.magnitude);
 
+            Vector2 newVelocityB = _calculator.CalculateBounce(normalB, physB.Velocity.magnitude);
+            
             physA.SetVelocity(newVelocityA);
             physB.SetVelocity(newVelocityB);
-
 
             bool aIsShip = IsShip(a.EntityType);
 
