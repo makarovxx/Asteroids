@@ -19,7 +19,7 @@ namespace Project.Scripts.Gameplay.Utilities.Weapons
         private readonly DesktopInput _input;
         private readonly BulletData _bulletData;
         private readonly ShipPhysicsProvider _shipPhysics;
-        private Vector2 _positionFire;
+        private float _cooldownFire;
 
         [Inject]
         public BulletLauncher(BulletData bulletData, ShipPhysicsProvider shipPhysics, IPool<Bullet> bulletPool,
@@ -30,6 +30,7 @@ namespace Project.Scripts.Gameplay.Utilities.Weapons
             _bulletPool = bulletPool;
             _input = input;
             _signalBus = signalBus;
+            _cooldownFire = _bulletData.CooldownFire;
         }
 
         public void Initialize()
@@ -44,11 +45,10 @@ namespace Project.Scripts.Gameplay.Utilities.Weapons
 
         public void Tick()
         {
-            if (_input.IsFireBulletLauncher())
-            {
-                Debug.Log("FireBullet");
-                FireBullet(_shipPhysics.PhysicsTarget.DirectionBody, GetSetPositionFire());
-            }
+            _cooldownFire -= Time.deltaTime;
+            if (!_input.IsFireBulletLauncher()) return;
+            if (_cooldownFire <= 0)
+                FireBullet(_shipPhysics.PhysicsTarget.DirectionBody, GetPositionFire());
         }
 
         private void FireBullet(Vector2 direction, Vector2 positionFire)
@@ -61,6 +61,7 @@ namespace Project.Scripts.Gameplay.Utilities.Weapons
             bulletPhys.SetVelocity(direction * _bulletData.Speed);
 
             BulletLifeRoutine(bullet).Forget();
+            ResetCooldownFire();
         }
 
         private async UniTask BulletLifeRoutine(Bullet bullet)
@@ -86,9 +87,11 @@ namespace Project.Scripts.Gameplay.Utilities.Weapons
             _bulletPool.PushObject(bullet);
         }
 
-        private Vector2 GetSetPositionFire()
+        private Vector2 GetPositionFire()
         {
             return _shipPhysics.PhysicsTarget.Position + _shipPhysics.PhysicsTarget.DirectionBody * OffsetFirePosition;
         }
+
+        private void ResetCooldownFire() => _cooldownFire = _bulletData.CooldownFire;
     }
 }

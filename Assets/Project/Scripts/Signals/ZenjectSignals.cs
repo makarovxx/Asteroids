@@ -23,4 +23,8 @@ namespace Project.Scripts.Signals
             HitBy = hitBy;
         }
     }
+
+    public class ShipDeathSignal
+    {
+    }
 }

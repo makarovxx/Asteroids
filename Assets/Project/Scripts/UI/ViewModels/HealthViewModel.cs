@@ -1,7 +1,6 @@
 using System;
 using MVVM;
 using Project.Scripts.Gameplay.Utilities.Health;
-using Sirenix.OdinInspector;
 using UniRx;
 using Zenject;
 
@@ -9,11 +8,11 @@ namespace Project.Scripts.UI.ViewModels
 {
     public sealed class HealthViewModel : IInitializable, IDisposable
     {
-        [Data("1")]
+        [Data("Health")] 
         public readonly ReactiveProperty<string> CurrentHealth = new();
 
         private readonly ShipHealth _shipHealth;
-        
+
         public HealthViewModel(ShipHealth shipHealth)
         {
             _shipHealth = shipHealth;
@@ -32,7 +31,7 @@ namespace Project.Scripts.UI.ViewModels
 
         private void OnHealthChanged(int currentHealth)
         {
-            CurrentHealth.Value = currentHealth + "%";
+            CurrentHealth.Value = currentHealth.ToString();
         }
     }
 }

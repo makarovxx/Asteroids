@@ -1,5 +1,6 @@
 {
   "PoolSize": 30,
   "LifeTime": 2.5,
-  "Speed": 7
+  "Speed": 7,
+  "CooldownFire": 0.5
 }

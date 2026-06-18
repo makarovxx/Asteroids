@@ -4,7 +4,7 @@ using Zenject;
 
 namespace Project.Scripts.Core.CustomPhysics
 {
-    public class ShipPhysics : MovingPhysics
+    public sealed class ShipPhysics : MovingPhysics
     {
         private readonly float _acceleration;
         private readonly float _damping;

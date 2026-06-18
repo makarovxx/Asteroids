@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Project.Scripts.Core.CustomPhysics;
 using UnityEngine;
 using Zenject;
 
-namespace Project.Scripts.Core.CustomPhysics
+namespace Project.Scripts.Gameplay.Utilities.World
 {
-    public class PhysicsSystem : IInitializable, IDisposable, IFixedTickable
+    public sealed class PhysicsSystem : IInitializable, IDisposable, IFixedTickable
     {
         private readonly List<IPhysics> _physicsObjects;
         private readonly WorldBoundsTeleport _worldBoundsTeleport;

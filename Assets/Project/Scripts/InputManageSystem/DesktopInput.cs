@@ -23,7 +23,7 @@ namespace Project.Scripts.InputManageSystem
 
         public bool IsFireBulletLauncher()
         {
-            return Input.GetKeyUp(KeyCode.F);
+            return Input.GetKeyDown(KeyCode.F);
         }
 
         public bool IsLaserFire()

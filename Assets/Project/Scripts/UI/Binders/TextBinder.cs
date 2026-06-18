@@ -8,10 +8,10 @@ namespace Project.Scripts.UI.Binders
     public sealed class TextBinder : IBinder, IObserver<string>
     {
         private readonly TMP_Text _view;
-        private readonly ReactiveProperty<string> _property;
+        private readonly IReadOnlyReactiveProperty<string> _property;
         private IDisposable _handle;
 
-        public TextBinder(TMP_Text view, ReactiveProperty<string> property)
+        public TextBinder(TMP_Text view, IReadOnlyReactiveProperty<string> property)
         {
             _view = view;
             _property = property;

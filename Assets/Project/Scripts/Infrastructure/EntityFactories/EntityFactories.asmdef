@@ -9,7 +9,8 @@
         "Entities.Ship",
         "Core.Entities.Enemies",
         "PersistantData",
-        "SerializableData"
+        "SerializableData",
+        "WorldUtilities"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

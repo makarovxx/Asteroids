@@ -6,8 +6,8 @@ namespace Project.Scripts.Gameplay.Utilities.Health
 {
     public class ShipHealth : IInitializable, IDisposable
     {
-        public event Action<int> OnHealthChanged;
         private readonly SignalBus _signalBus;
+        public event Action<int> OnHealthChanged;
         public int CurrentHealth { get; private set; }
         
         [Inject]
@@ -30,6 +30,8 @@ namespace Project.Scripts.Gameplay.Utilities.Health
         private void TakeDamage()
         {
             CurrentHealth--;
+            if (CurrentHealth <= 0)
+                _signalBus.Fire<ShipDeathSignal>();
             OnHealthChanged?.Invoke(CurrentHealth);
         }
     }

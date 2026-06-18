@@ -19,7 +19,10 @@
         "SerializableData",
         "ShipHealth",
         "UI",
-        "MVVM"
+        "MVVM",
+        "ScoreSystem",
+        "ShipParameters",
+        "WorldUtilities"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

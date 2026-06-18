@@ -11,6 +11,7 @@ namespace Project.Scripts.Infrastructure.Installers
 
             Container.DeclareSignal<ShipHitEnemy>();
             Container.DeclareSignal<EnemyHitByWeaponSignal>();
+            Container.DeclareSignal<ShipDeathSignal>();
         }
     }
 }

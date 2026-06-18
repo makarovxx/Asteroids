@@ -94,19 +94,7 @@ namespace MVVM
                 {
                     continue;
                 }
-                
-                Debug.Log(view);
-                Debug.Log(model);
-                Debug.Log(view?.GetType());
-                Debug.Log(model?.GetType());
-                
-                Debug.Log(
-                    $"Binder: {binderType.Name}\n" +
-                    $"View: {view.GetType()}\n" +
-                    $"Model: {model.GetType()}\n" +
-                    $"Ctor0: {parameters[0].ParameterType}\n" +
-                    $"Ctor1: {parameters[1].ParameterType}"
-                );
+
                 if (parameters[0].ParameterType.IsInstanceOfType(view) &&
                     parameters[1].ParameterType.IsInstanceOfType(model))
                 {

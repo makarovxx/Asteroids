@@ -6,7 +6,7 @@ namespace Project.Scripts.UI.Views
 {
     public class HealthView : MonoBehaviour
     {
-        [Data("1")]
+        [Data("Health")]
         [SerializeField] public TMP_Text _healthAmount;
     }
 }

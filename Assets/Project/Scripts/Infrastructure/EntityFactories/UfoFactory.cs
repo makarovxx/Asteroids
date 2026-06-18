@@ -1,5 +1,6 @@
 using Project.Scripts.Core.CustomPhysics;
 using Project.Scripts.Gameplay.Entities.Enemies.Ufo;
+using Project.Scripts.Gameplay.Utilities.World;
 using Zenject;
 
 namespace Project.Scripts.Infrastructure.EntityFactories

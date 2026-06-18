@@ -14,7 +14,7 @@ namespace Project.Scripts.Plugins.JsonUtilities
 
             string json = File.ReadAllText(path);
 
-            // return JsonConvert.DeserializeObject<T>(json);
+            return JsonConvert.DeserializeObject<T>(json);
         }
     }
 }

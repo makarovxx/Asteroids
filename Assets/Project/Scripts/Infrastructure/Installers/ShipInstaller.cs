@@ -17,8 +17,8 @@ namespace Project.Scripts.Infrastructure.Installers
 
         public override void InstallBindings()
         {
-            Container.Bind<DesktopInput>().AsSingle().NonLazy();
-            Container.Bind<RotationResolver>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<DesktopInput>().AsSingle();
+            Container.Bind<RotationResolver>().AsSingle();
 
             BindShipSpawner();
             Container.Bind<ShipPhysicsProvider>().AsSingle();

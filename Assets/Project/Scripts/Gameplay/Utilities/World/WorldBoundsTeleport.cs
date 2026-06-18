@@ -1,21 +1,22 @@
+using Project.Scripts.Core.CustomPhysics;
 using UnityEngine;
 using Zenject;
 
-namespace Project.Scripts.Core.CustomPhysics
+namespace Project.Scripts.Gameplay.Utilities.World
 {
-    public class WorldBoundsTeleport
+    public sealed class WorldBoundsTeleport
     {
-        private readonly Camera _camera;
-        
+        private readonly CameraSpaceMapper _mapper;
+
         [Inject]
-        public WorldBoundsTeleport(Camera camera)
+        public WorldBoundsTeleport(CameraSpaceMapper mapper)
         {
-            _camera = camera;
+            _mapper = mapper;
         }
 
         public void TeleportIfOutOfBounds(IPhysics entity)
         {
-            Vector2 viewportPosition = _camera.WorldToViewportPoint(entity.Position);
+            Vector2 viewportPosition = _mapper.WorldToViewport(entity.Position);
 
             if (viewportPosition.x > 1f)
             {
@@ -35,7 +36,7 @@ namespace Project.Scripts.Core.CustomPhysics
                 viewportPosition.y = 1f;
             }
 
-            entity.Position = _camera.ViewportToWorldPoint(viewportPosition);
+            entity.Position = _mapper.ViewportToWorld(viewportPosition);
         }
     }
 }
