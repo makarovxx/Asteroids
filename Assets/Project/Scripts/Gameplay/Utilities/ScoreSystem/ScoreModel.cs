@@ -6,9 +6,9 @@ using Zenject;
 
 namespace Project.Scripts.Gameplay.Utilities.ScoreSystem
 {
-    public class ScoreModel : IInitializable, IDisposable
+    public sealed class ScoreModel : IInitializable, IDisposable
     {
-        private readonly SignalBus _signalBus;
+        [Inject] private readonly SignalBus _signalBus;
 
         private readonly Dictionary<EntityType, int> _rewardsDict = new()
         {
@@ -23,25 +23,18 @@ namespace Project.Scripts.Gameplay.Utilities.ScoreSystem
         public int CurrentScore { get; private set; }
         public int ScoreRecord { get; private set; }
 
-        [Inject]
-        public ScoreModel(SignalBus signalBus)
-        {
-            CurrentScore = 0;
-            _signalBus = signalBus;
-        }
-
 
         public void Initialize()
         {
-            _signalBus.Subscribe<EnemyHitByWeaponSignal>(HandleEnemyDestroy);
+            _signalBus.Subscribe<WeaponHitEnemy>(HandleEnemyDestroy);
         }
 
         public void Dispose()
         {
-            _signalBus.Unsubscribe<EnemyHitByWeaponSignal>(HandleEnemyDestroy);
+            _signalBus.Unsubscribe<WeaponHitEnemy>(HandleEnemyDestroy);
         }
 
-        private void HandleEnemyDestroy(EnemyHitByWeaponSignal signal)
+        private void HandleEnemyDestroy(WeaponHitEnemy signal)
         {
             _rewardsDict.TryGetValue(signal.EnemyDestroyed.EntityType, out var rewards);
             NotifyScoreChanged(rewards);
@@ -51,11 +44,15 @@ namespace Project.Scripts.Gameplay.Utilities.ScoreSystem
         {
             CurrentScore += score;
             OnScoreChanged?.Invoke(CurrentScore);
+            
+            if(CurrentScore >= ScoreRecord)
+                UpdateScoreRecord(CurrentScore);
         }
 
         private void UpdateScoreRecord(int score)
         {
-            ScoreRecord += score;
+            ScoreRecord = score;
+            OnMaxScoreChanged?.Invoke(ScoreRecord);
         }
     }
 }

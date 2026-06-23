@@ -9,7 +9,9 @@
         "Zenject",
         "UniTask",
         "Signals",
-        "SerializableData"
+        "SerializableData",
+        "TickableSystem",
+        "WorldUtilities"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

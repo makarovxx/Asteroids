@@ -8,6 +8,7 @@ namespace Project.Scripts.Infrastructure.Configs.SerializableData
         public int PoolSize;
         public int SpawnInterval;
         public float Speed;
+        public float DirectionUpdateInterval;
         public int MaxActiveUfos;
     }
 }

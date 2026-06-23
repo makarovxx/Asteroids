@@ -1,9 +1,9 @@
 {
   "SpawnInterval": 5,
   "AmountSpawnAfterDestroy": 3,
-  "PoolSizeLarge": 10,
-  "PoolSizeMedium": 20,
-  "PoolSizeSmall": 40,
+  "PoolSizeLarge": 6,
+  "PoolSizeMedium": 18,
+  "PoolSizeSmall": 54,
   "SpeedMin": 1,
   "SpeedMax": 2.5,
   "MaxActiveAsteroids": 30

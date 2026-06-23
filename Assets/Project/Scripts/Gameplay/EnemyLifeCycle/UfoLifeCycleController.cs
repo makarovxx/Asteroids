@@ -1,7 +1,7 @@
 using System;
-using System.Threading;
-using Cysharp.Threading.Tasks;
+using Project.Scripts.Core.TickableSystem;
 using Project.Scripts.Gameplay.Entities.Enemies.Ufo;
+using Project.Scripts.Gameplay.Utilities.World;
 using Project.Scripts.Infrastructure.Configs.SerializableData;
 using Project.Scripts.Plugins;
 using Project.Scripts.Signals;
@@ -11,66 +11,49 @@ using Random = UnityEngine.Random;
 
 namespace Project.Scripts.Gameplay.EnemyLifeCycle
 {
-    public class UfoLifeCycleController : IInitializable, IDisposable
+    public class UfoLifeCycleController : IInitializable, IDisposable, IBehaviourTickable
     {
-        private readonly UfoData _config;
+        [Inject] private readonly SignalBus _signalBus;
+        
+        private readonly UfoData _ufoData;
         private readonly IPool<Ufo> _pool;
-        private readonly Camera _camera;
-        private readonly SignalBus _signalBus;
-
-        private readonly Vector2[] _spawnPoints = {
-            new Vector2(0.1f, 0.25f),
-            new Vector2(0.1f, 0.5f),
-            new Vector2(0.1f, 0.75f),
-            new Vector2(0.9f, 0.25f),
-            new Vector2(0.9f, 0.5f),
-            new Vector2(0.9f, 0.75f),
-        };
-
-        private CancellationTokenSource _cts;
+        
+        private readonly CameraSpaceMapper _cameraMapper;
+        private readonly SpawnPointsProvider _spawnPointsProvider;
+        private float _spawnTimer;
 
         [Inject]
-        public UfoLifeCycleController(IPool<Ufo> pool, UfoData config, Camera camera, SignalBus signalBus)
+        public UfoLifeCycleController(IPool<Ufo> pool, UfoData ufoData, SpawnPointsProvider spawnPointsProvider, CameraSpaceMapper cameraMapper)
         {
             _pool = pool;
-            _config = config;
-            _camera = camera;
-            _signalBus = signalBus;
+            _ufoData = ufoData;
+            _spawnPointsProvider = spawnPointsProvider;
+            _cameraMapper = cameraMapper;
         }
 
 
         void IInitializable.Initialize()
         {
-            _signalBus.Subscribe<EnemyHitByWeaponSignal>(DespawnUfo);
-            _signalBus.Subscribe<ShipHitEnemy>(HandleShipHit);
-            _cts = new CancellationTokenSource();
-            RunSpawnLoop(_cts.Token).Forget();
+            SetSpawnTimer();
+            _signalBus.Subscribe<WeaponHitEnemy>(DespawnUfo);
+            _signalBus.Subscribe<ShipCollisionEnemy>(HandleShipHit);
         }
 
         void IDisposable.Dispose()
         {
-            _signalBus.Unsubscribe<EnemyHitByWeaponSignal>(DespawnUfo);
-            _signalBus.Unsubscribe<ShipHitEnemy>(HandleShipHit);
-            _cts?.Cancel();
-            _cts?.Dispose();
-            _cts = null;
+            _signalBus.Unsubscribe<WeaponHitEnemy>(DespawnUfo);
+            _signalBus.Unsubscribe<ShipCollisionEnemy>(HandleShipHit);
         }
 
-        private async UniTask RunSpawnLoop(CancellationToken ct)
+        public void Tick(float deltaTime)
         {
-            while (true)
-            {
-                bool cancelled = await UniTask
-                    .Delay(
-                        TimeSpan.FromSeconds(_config.SpawnInterval),
-                        cancellationToken: ct)
-                    .SuppressCancellationThrow();
+            _spawnTimer -= deltaTime;
 
-                if (cancelled)
-                    return;
-
-                SpawnUfo();
-            }
+            if (_spawnTimer > 0f)
+                return;
+            
+            SetSpawnTimer();
+            SpawnUfo();
         }
 
         private void SpawnUfo()
@@ -80,29 +63,30 @@ namespace Project.Scripts.Gameplay.EnemyLifeCycle
 
             Vector2 spawnPosition = GetRandomSpawnPosition();
             ufo.Physics.Position = spawnPosition;
+            ufo.Physics.TrySetTarget();
         }
 
-        private void DespawnUfo(EnemyHitByWeaponSignal enemyHitByWeaponSignal)
+        private void DespawnUfo(WeaponHitEnemy weaponHitEnemy)
         {
-            if (enemyHitByWeaponSignal.EnemyDestroyed is Ufo ufo)
+            if (weaponHitEnemy.EnemyDestroyed is Ufo ufo)
             {
                 ufo.Physics.StopMove();
                 _pool.PushObject(ufo);
             }
         }
 
-        private void HandleShipHit(ShipHitEnemy signal)
+        private void HandleShipHit(ShipCollisionEnemy signal)
         {
             if (signal.HitBy is Ufo ufo)
-            {
                 ufo.Physics.Reset();
-            }
         }
 
         private Vector2 GetRandomSpawnPosition()
         {
-            Vector2 viewportPoint = _spawnPoints[Random.Range(0, _spawnPoints.Length)];
-            return _camera.ViewportToWorldPoint(viewportPoint);
+            Vector2 viewportPoint = _spawnPointsProvider.SpawnPoints[Random.Range(0, _spawnPointsProvider.SpawnPoints.Length)];
+            return _cameraMapper.ViewportToWorld(viewportPoint);
         }
+
+        private void SetSpawnTimer() => _spawnTimer = _ufoData.SpawnInterval;
     }
 }

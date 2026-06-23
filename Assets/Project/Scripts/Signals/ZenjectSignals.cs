@@ -2,29 +2,46 @@ using Project.Scripts.Gameplay.Entities;
 
 namespace Project.Scripts.Signals
 {
-    public class ShipHitEnemy
+    public class ShipCollisionEnemy
     {
         public Entity HitBy { get; }
 
-        public ShipHitEnemy(Entity hitBy)
+        public ShipCollisionEnemy(Entity hitBy)
         {
             HitBy = hitBy;
         }
     }
     
-    public class EnemyHitByWeaponSignal
+    public class WeaponHitEnemy
     {
         public Entity EnemyDestroyed { get; }
         public Entity HitBy { get; }
 
-        public EnemyHitByWeaponSignal(Entity enemyDestroyed, Entity hitBy)
+        public WeaponHitEnemy(Entity enemyDestroyed, Entity hitBy)
         {
             EnemyDestroyed = enemyDestroyed;
             HitBy = hitBy;
         }
     }
 
-    public class ShipDeathSignal
+    public class GameOverSignal
     {
     }
+
+    public class ShipDamageSignal
+    {
+    }
+
+
+    public class InvulnerableEndedSignal
+    {
+    }
+
+    public class RestartGameSignal
+    {
+    }
+    
+    public class PauseGameSignal{}
+    
+    public class ResumeGameSignal{}
 }

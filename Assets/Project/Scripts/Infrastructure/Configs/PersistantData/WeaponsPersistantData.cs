@@ -9,5 +9,6 @@ namespace Project.Scripts.Infrastructure.Configs.PersistantData
     {
         public Bullet BulletPrefab;
         public Transform BulletContainer;
+        public Laser LaserPrefab;
     }
 }

@@ -10,7 +10,8 @@
         "Core.Entities",
         "UniTask",
         "Signals",
-        "SerializableData"
+        "SerializableData",
+        "TickableSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,0 +1,25 @@
+{
+    "name": "ShipStateMachine",
+    "rootNamespace": "",
+    "references": [
+        "Zenject",
+        "Signals",
+        "Entities.Ship",
+        "Core.Entities",
+        "Core.CustomPhysics",
+        "SerializableData",
+        "InputManageSystem",
+        "Core.CollisionSystem",
+        "VFX",
+        "TickableSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

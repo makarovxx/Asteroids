@@ -22,7 +22,10 @@
         "MVVM",
         "ScoreSystem",
         "ShipParameters",
-        "WorldUtilities"
+        "WorldUtilities",
+        "ShipStateMachine",
+        "VFX",
+        "TickableSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -7,16 +7,15 @@ namespace Project.Scripts.Infrastructure.EntityFactories
 {
     public class EntityFactory<TEntity, TPhysics> : IEntityFactory<TEntity>
         where TEntity : Entity<TPhysics>
-        where TPhysics : PhysicBase
+        where TPhysics : PhysicBase, IMovingPhysics
     {
         private readonly TEntity _prefab;
         private readonly PhysicsSystem _physicsSystem;
-        protected readonly DiContainer Container;
+        [Inject] protected readonly DiContainer Container;
 
-        protected EntityFactory(TEntity prefab, DiContainer container, PhysicsSystem physicsSystem)
+        protected EntityFactory(TEntity prefab, PhysicsSystem physicsSystem)
         {
             _prefab = prefab;
-            Container = container;
             _physicsSystem = physicsSystem;
         }
 

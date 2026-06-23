@@ -6,7 +6,9 @@
         "Core.CustomPhysics",
         "Zenject",
         "Core.CollisionSystem",
-        "Signals"
+        "Signals",
+        "UniTask",
+        "VFX"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

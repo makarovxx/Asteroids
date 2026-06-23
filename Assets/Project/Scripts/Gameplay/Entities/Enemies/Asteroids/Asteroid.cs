@@ -5,7 +5,7 @@ namespace Project.Scripts.Gameplay.Entities.Enemies.Asteroids
 {
     public class Asteroid : Enemy<SolidPhysics>
     {
-        public override ParticleSystem CollisionShipParticles { get; protected set; }
+        public virtual ParticleSystem CollisionShipParticles { get; protected set; }
         public override CollisionHandlePriority CollisionPriority => CollisionHandlePriority.Low;
         public override void Init(IPhysics physics)
         {

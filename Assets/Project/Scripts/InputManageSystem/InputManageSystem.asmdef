@@ -1,7 +1,10 @@
 {
     "name": "InputManageSystem",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "Zenject",
+        "UnityEngine.UI"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

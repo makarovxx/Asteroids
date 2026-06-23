@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Project.Scripts.Core.CustomPhysics
 {
-    public class RotationResolver
+    public sealed class RotationResolver
     {
         private readonly Dictionary<DirectionRotation, Vector2> _directions = new()
         {

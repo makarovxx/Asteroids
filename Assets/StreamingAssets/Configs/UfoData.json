@@ -2,5 +2,6 @@
   "PoolSize": 10,
   "SpawnInterval": 15,
   "Speed": 2,
+  "DirectionUpdateInterval": 4,
   "MaxActiveAsteroids": 30
 }

@@ -1,5 +1,6 @@
 using Project.Scripts.Core.CustomPhysics;
 using Project.Scripts.Gameplay.Entities.Ship;
+using Project.Scripts.Gameplay.ShipStateMachine;
 using Project.Scripts.Infrastructure.Configs.PersistantData;
 using Project.Scripts.Infrastructure.Configs.SerializableData;
 using Project.Scripts.Infrastructure.EntityFactories;
@@ -10,26 +11,50 @@ using Zenject;
 
 namespace Project.Scripts.Infrastructure.Installers
 {
-    public class ShipInstaller : MonoInstaller
+    public sealed class ShipInstaller : MonoInstaller
     {
-        [ReadOnly] [SerializeField] private PlayerPersistantData _playerConfig;
-        [Inject] [ReadOnly] [SerializeField] private PlayerData _playerData;
+        [ReadOnly] [SerializeField] private ShipPersistantData _shipPersistantData;
+        [Inject] [ReadOnly] [SerializeField] private ShipData _shipData;
 
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<DesktopInput>().AsSingle();
+            BindInputSystem();
             Container.Bind<RotationResolver>().AsSingle();
+            Container.Bind<ShipProvider>().AsSingle();
+            Container.Bind<ShipPhysicsProvider>().AsSingle();
 
             BindShipSpawner();
-            Container.Bind<ShipPhysicsProvider>().AsSingle();
+            BindShipStateMachine();
+        }
+
+        private void BindInputSystem()
+        {
+            Container.Bind<MobileInputState>().AsSingle();
+            Container.Bind<IInputStrategy>().To<InputDesktopStrategy>().AsSingle();
+            Container.Bind<IInputStrategy>().To<InputMobileStrategy>().AsSingle();
+            Container.BindInterfacesAndSelfTo<InputDetector>().AsSingle();
+            Container.Bind<InputManager>().AsSingle();
         }
 
         private void BindShipSpawner()
         {
-            Container.BindInterfacesAndSelfTo<ShipSpawner>()
-                .AsSingle()
-                .WithArguments(_playerConfig).NonLazy();
-            Container.BindInterfacesTo<Ship>().FromComponentInHierarchy().AsSingle();
+            Container.BindInterfacesAndSelfTo<ShipSpawner>().AsSingle()
+                .WithArguments(_shipPersistantData).NonLazy();
+        }
+
+        private void BindShipStateMachine()
+        {
+            Container.BindInterfacesAndSelfTo<InvulnerabilitySystem>().AsSingle();
+
+            Container.BindInterfacesAndSelfTo<VulnerableState>().AsSingle();
+
+            Container.BindInterfacesAndSelfTo<InvulnerableState>().AsSingle();
+
+            Container.BindInterfacesAndSelfTo<DeadState>().AsSingle();
+
+            Container.BindInterfacesAndSelfTo<ShipStateMachine>().AsSingle();
+
+            Container.BindInterfacesAndSelfTo<ShipStateMachineBehaviour>().AsSingle().NonLazy();
         }
     }
 }

@@ -1,16 +1,15 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using Project.Scripts.Core.CustomPhysics;
-using UnityEngine;
 using Zenject;
 
 namespace Project.Scripts.Gameplay.Utilities.World
 {
-    public sealed class PhysicsSystem : IInitializable, IDisposable, IFixedTickable
+    public sealed class PhysicsSystem
     {
+        [Inject] private  readonly SignalBus _signalBus;
         private readonly List<IPhysics> _physicsObjects;
         private readonly WorldBoundsTeleport _worldBoundsTeleport;
-        private readonly float _deltaTime = Time.fixedDeltaTime;
 
         public PhysicsSystem(WorldBoundsTeleport worldBoundsTeleport)
         {
@@ -18,21 +17,7 @@ namespace Project.Scripts.Gameplay.Utilities.World
             _physicsObjects = new List<IPhysics>();
         }
 
-        void IInitializable.Initialize()
-        {
-        }
-
-        void IDisposable.Dispose()
-        {
-        }
-
-        void IFixedTickable.FixedTick()
-        {
-            TickMovement(_deltaTime);
-            TickBoundsCheck();
-        }
-
-        public void Register(IPhysics physicsObject)
+        public void Register(IMovingPhysics physicsObject)
         {
             if (_physicsObjects.Contains(physicsObject))
                 return;
@@ -40,13 +25,16 @@ namespace Project.Scripts.Gameplay.Utilities.World
             _physicsObjects.Add(physicsObject);
         }
 
+        public void Tick(float fixedDeltaTime)
+        {
+            TickMovement(fixedDeltaTime);
+            TickBoundsCheck();
+        }
+
         private void TickMovement(float deltaTime)
         {
-            for (int i = 0; i < _physicsObjects.Count; i++)
+            foreach (IPhysics physics in _physicsObjects)
             {
-                IPhysics physics =
-                    _physicsObjects[i];
-
                 if (!physics.IsActive)
                     continue;
 
@@ -56,14 +44,8 @@ namespace Project.Scripts.Gameplay.Utilities.World
 
         private void TickBoundsCheck()
         {
-            for (int i = 0; i < _physicsObjects.Count; i++)
+            foreach (var physics in _physicsObjects.Cast<IMovingPhysics>().Where(physics => physics.IsActive))
             {
-                IPhysics physics =
-                    _physicsObjects[i];
-
-                if (!physics.IsActive)
-                    continue;
-
                 _worldBoundsTeleport.TeleportIfOutOfBounds(physics);
             }
         }

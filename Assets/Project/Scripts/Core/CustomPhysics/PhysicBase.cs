@@ -10,17 +10,11 @@ namespace Project.Scripts.Core.CustomPhysics
             set => Body.position = value;
         }
 
-        public float Rotation
-        {
-            get => Body.rotation.eulerAngles.z;
-            set => Body.rotation = Quaternion.Euler(0, 0, value);
-        }
-        
+        public float Rotation => Body.rotation.eulerAngles.z;
+
         public bool IsActive => Body.gameObject.activeSelf;
-        
-        public bool CanMove { get; set; }
-        
-        protected Transform Body;
+
+        protected readonly Transform Body;
 
         protected PhysicBase(Transform body)
         {

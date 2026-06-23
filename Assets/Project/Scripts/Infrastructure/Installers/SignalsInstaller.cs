@@ -9,9 +9,15 @@ namespace Project.Scripts.Infrastructure.Installers
         {
             SignalBusInstaller.Install(Container);
 
-            Container.DeclareSignal<ShipHitEnemy>();
-            Container.DeclareSignal<EnemyHitByWeaponSignal>();
-            Container.DeclareSignal<ShipDeathSignal>();
+            Container.DeclareSignal<PauseGameSignal>();
+            Container.DeclareSignal<ResumeGameSignal>();
+            Container.DeclareSignal<RestartGameSignal>();
+            Container.DeclareSignal<GameOverSignal>();
+            
+            Container.DeclareSignal<ShipCollisionEnemy>();
+            Container.DeclareSignal<WeaponHitEnemy>();
+            Container.DeclareSignal<InvulnerableEndedSignal>();
+            Container.DeclareSignal<ShipDamageSignal>();
         }
     }
 }

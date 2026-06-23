@@ -6,7 +6,7 @@ using Zenject;
 
 namespace Project.Scripts.Core.CollisionSystem
 {
-    public class CollisionSystem
+    public sealed class CollisionSystem
     {
         private readonly CollisionMatrix _matrix;
         private readonly CollisionResponseCalculator _calculator;
@@ -72,9 +72,9 @@ namespace Project.Scripts.Core.CollisionSystem
             bool aIsShip = IsShip(a.EntityType);
 
             if (aIsShip)
-                _signalBus.Fire(new ShipHitEnemy(b));
+                _signalBus.Fire(new ShipCollisionEnemy(b));
             else
-                _signalBus.Fire(new ShipHitEnemy(a));
+                _signalBus.Fire(new ShipCollisionEnemy(a));
         }
 
         private void ProcessStraight(Entity a, Entity b)
@@ -94,7 +94,7 @@ namespace Project.Scripts.Core.CollisionSystem
                 weaponHitBy = b;
             }
 
-            _signalBus.Fire(new EnemyHitByWeaponSignal(enemy, weaponHitBy));
+            _signalBus.Fire(new WeaponHitEnemy(enemy, weaponHitBy));
         }
 
         private bool IsWeapon(EntityType typeEntity)

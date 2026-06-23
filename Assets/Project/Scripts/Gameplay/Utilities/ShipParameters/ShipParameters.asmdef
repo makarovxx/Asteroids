@@ -1,4 +1,4 @@
 {
 	"name": "ShipParameters",
-	"references":[ "GUID:9e9a9e662c0ebb94c897ece722521978", "GUID:2702f3760a48f334f8f31398619bb1c5" ]
+	"references":[ "GUID:9e9a9e662c0ebb94c897ece722521978", "GUID:2702f3760a48f334f8f31398619bb1c5", "TickableSystem" ]
 }

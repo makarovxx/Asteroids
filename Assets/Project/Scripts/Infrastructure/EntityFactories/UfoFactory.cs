@@ -1,22 +1,17 @@
 using Project.Scripts.Core.CustomPhysics;
 using Project.Scripts.Gameplay.Entities.Enemies.Ufo;
 using Project.Scripts.Gameplay.Utilities.World;
-using Zenject;
+using Project.Scripts.Infrastructure.Configs.SerializableData;
 
 namespace Project.Scripts.Infrastructure.EntityFactories
 {
     public sealed class UfoFactory : EntityFactory<Ufo, FollowPhysics>
     {
-        private readonly float _speed;
+        private readonly UfoData _ufoData;
 
-        public UfoFactory(
-            Ufo prefab,
-            DiContainer container,
-            PhysicsSystem physicsSystem,
-            float speed)
-            : base(prefab, container, physicsSystem)
+        public UfoFactory(Ufo prefab, PhysicsSystem physicsSystem, UfoData ufoData) : base(prefab, physicsSystem)
         {
-            _speed = speed;
+            _ufoData = ufoData;
         }
 
         protected override FollowPhysics CreatePhysics(Ufo entity)
@@ -24,7 +19,8 @@ namespace Project.Scripts.Infrastructure.EntityFactories
             return Container.Instantiate<FollowPhysics>(new object[]
             {
                 entity.transform,
-                _speed
+                _ufoData.Speed,
+                _ufoData.DirectionUpdateInterval
             });
         }
     }

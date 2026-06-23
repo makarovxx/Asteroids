@@ -19,6 +19,7 @@ namespace Project.Scripts.Infrastructure.Installers
         public override void InstallBindings()
         {
             BindBulletLauncher();
+            BindLaserLauncher();
         }
 
         private void BindBulletLauncher()
@@ -33,6 +34,13 @@ namespace Project.Scripts.Infrastructure.Installers
                 .WithArguments(_bulletData.PoolSize, _persistantData.BulletContainer);
 
             Container.BindInterfacesAndSelfTo<BulletLauncher>().AsSingle().WithArguments(_bulletData);
+        }
+
+        private void BindLaserLauncher()
+        {
+            Container.BindInterfacesAndSelfTo<LaserSpawner>().AsSingle().WithArguments(_persistantData.LaserPrefab).NonLazy();
+            Container.Bind<LaserProvider>().AsSingle();
+            Container.BindInterfacesAndSelfTo<LaserController>().AsSingle();
         }
     }
 }

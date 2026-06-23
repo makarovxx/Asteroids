@@ -11,7 +11,7 @@ namespace Project.Scripts.Core.CollisionSystem
             return diff == Vector2.zero ? Random.insideUnitCircle.normalized : diff.normalized;
         }
 
-        public Vector2 CalculateBounce(Vector2 collisionNormal, float currentSpeed, float minBounceSpeed = 3f)
+        public Vector2 CalculateBounce(Vector2 collisionNormal, float currentSpeed, float minBounceSpeed = 1.5f)
         {
             float speed = Mathf.Max(currentSpeed, minBounceSpeed);
 

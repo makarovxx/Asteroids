@@ -1,5 +1,6 @@
 using Project.Scripts.Core.CollisionSystem;
-using Project.Scripts.Core.CustomPhysics;
+using Project.Scripts.Core.TickableSystem;
+using Project.Scripts.Gameplay.EnemyLifeCycle;
 using Project.Scripts.Gameplay.Utilities.World;
 using UnityEngine;
 using Zenject;
@@ -21,6 +22,8 @@ namespace Project.Scripts.Infrastructure.Installers
             Container.Bind<Camera>().FromComponentInHierarchy().AsSingle();
             Container.Bind<WorldBoundsTeleport>().AsSingle();
             Container.BindInterfacesAndSelfTo<PhysicsSystem>().AsSingle();
+            Container.BindInterfacesAndSelfTo<TickableService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<SpawnPointsProvider>().AsSingle();
             Container.Bind<CameraSpaceMapper>().AsSingle();
         }
     }

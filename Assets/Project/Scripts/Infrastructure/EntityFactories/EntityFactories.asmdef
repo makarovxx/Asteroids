@@ -10,7 +10,8 @@
         "Core.Entities.Enemies",
         "PersistantData",
         "SerializableData",
-        "WorldUtilities"
+        "WorldUtilities",
+        "Projectile"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

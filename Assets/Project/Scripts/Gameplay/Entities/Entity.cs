@@ -14,9 +14,7 @@ namespace Project.Scripts.Gameplay.Entities
             Physics = physics;
         }
     }
-
-    public abstract class Entity<TPhysics> : Entity
-        where TPhysics : class, IPhysics
+    public abstract class Entity<TPhysics> : Entity where TPhysics : class, IMovingPhysics
     {
         public new TPhysics Physics => (TPhysics)base.Physics;
     }

@@ -1,5 +1,6 @@
 using Project.Scripts.Gameplay.EnemyLifeCycle;
 using Project.Scripts.Gameplay.Entities.Enemies.Ufo;
+using Project.Scripts.Gameplay.Utilities.VFX;
 using Project.Scripts.Infrastructure.Configs.PersistantData;
 using Project.Scripts.Infrastructure.Configs.SerializableData;
 using Project.Scripts.Infrastructure.EntityFactories;
@@ -28,7 +29,7 @@ namespace Project.Scripts.Infrastructure.Installers
                 .Bind<ICreator<Ufo>>()
                 .To<UfoFactory>()
                 .AsSingle()
-                .WithArguments(_persistantData.Prefab, _ufoData.Speed);
+                .WithArguments(_persistantData.Prefab);
         }
  
         private void BindUfoPool()
@@ -47,6 +48,8 @@ namespace Project.Scripts.Infrastructure.Installers
                 .BindInterfacesTo<UfoLifeCycleController>()
                 .AsSingle()
                 .WithArguments(_ufoData);
+            
+            Container.Bind<CollisionEffectHandler>().AsTransient();
         }
     }
 }

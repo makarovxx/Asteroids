@@ -2,22 +2,19 @@ using UnityEngine;
 
 namespace Project.Scripts.Core.CustomPhysics
 {
-    public class FollowPhysics : MovingPhysics
+    public sealed class FollowPhysics : SolidPhysics
     {
-        private const float DirectionUpdateInterval = 3;
         private readonly ShipPhysicsProvider _shipProvider;
+        private readonly float  _directionUpdateInterval;
         private readonly float _speed;
         private float _elapsedTime;
-
-        public FollowPhysics(
-            Transform body,
-            RotationResolver rotationResolver,
-            ShipPhysicsProvider shipProvider,
-            float speed)
-            : base(body, rotationResolver)
+        
+        public FollowPhysics(Transform body, float speed, float directionUpdateInterval,
+            ShipPhysicsProvider shipProvider) : base(body)
         {
             _shipProvider = shipProvider;
             _speed = speed;
+            _directionUpdateInterval = directionUpdateInterval;
         }
 
         public override void Tick(float deltaTime)
@@ -27,13 +24,19 @@ namespace Project.Scripts.Core.CustomPhysics
             if (_elapsedTime <= 0f)
             {
                 UpdateDirection();
-                _elapsedTime = DirectionUpdateInterval;
+                _elapsedTime = _directionUpdateInterval;
             }
 
             Move(deltaTime);
         }
 
-        public void Reset() => _elapsedTime = DirectionUpdateInterval;
+        public void Reset() => _elapsedTime = _directionUpdateInterval;
+
+        public void TrySetTarget()
+        {
+            if (_shipProvider?.PhysicsTarget != null)
+                UpdateDirection();
+        }
 
         private void UpdateDirection()
         {
